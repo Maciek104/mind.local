@@ -6,13 +6,12 @@ import {
   Body,
   Res,
   Req,
-  UseGuards,
 } from '@nestjs/common';
 
 import type { Response, Request } from 'express';
 
 import { AuthService } from './auth.service.js';
-import { AuthGuard } from './auth.guard.js';
+import { Public } from './public.decorator.js';
 import { LoginDto } from './dto/login.dto.js';
 
 interface AuthenticatedRequest extends Request {
@@ -42,6 +41,7 @@ export class AuthController {
   ) {}
 
   @Post('login')
+  @Public()
   async login(
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) response: Response,
@@ -67,7 +67,6 @@ export class AuthController {
   }
 
   @Get('me')
-  @UseGuards(AuthGuard)
   me(@Req() request: AuthenticatedRequest) {
     return {
       authenticated: true,
@@ -80,7 +79,6 @@ export class AuthController {
   }
 
   @Post('logout')
-  @UseGuards(AuthGuard)
   logout(
     @Req() request: AuthenticatedRequest,
     @Res({ passthrough: true }) response: Response,

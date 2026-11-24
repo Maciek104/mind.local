@@ -1,5 +1,6 @@
 
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 
 import { AuthController } from './auth.controller.js';
@@ -37,6 +38,10 @@ import { DatabaseModule } from '../database/database.module.js';
   providers: [
     AuthService,
     AuthGuard,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
 
   exports: [

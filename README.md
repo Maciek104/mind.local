@@ -1,140 +1,173 @@
+# local.mind
 
-# 🧠 Knowly
+**local.mind** is a local knowledge-management application for working with documents and conversations. The project consists of a React web application and a NestJS API backed by SQLite.
 
-**Knowly** is an AI-powered knowledge management application designed to help users organize, manage and interact with their own knowledge. The system provides an intelligent platform for uploading documents, source code and other files, automatically analyzing their content and organizing them into relevant categories using AI.
+> The project is under active development. Authentication, initial setup, and the database structure are implemented; the library, chat, and document modules are still being developed.
 
-The application allows users to upload various file formats, including PDF, DOC, DOCX, TXT and source code files. AI analyzes the provided materials, automatically assigns categories, generates tags and descriptions, and organizes documents into collections, making knowledge easier to navigate and manage.
-
-Knowly also provides an intelligent question-answering system powered by Large Language Models (LLMs). Users can ask questions about their uploaded materials and receive context-aware answers generated exclusively from the provided sources. The system uses Retrieval-Augmented Generation (RAG) to retrieve relevant information and ensure that responses are grounded in the user's own knowledge base.
-
-The main goal of the project is to create an intuitive and intelligent knowledge management solution that simplifies document organization, improves information retrieval and allows users to efficiently interact with their own knowledge.
-
-## 🚀 Tech Stack
-
-### Backend
-
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
-![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white)
-![Pydantic](https://img.shields.io/badge/Pydantic-E92063?style=for-the-badge&logo=pydantic&logoColor=white)
+## Technologies
 
 ### Frontend
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white)
 
-### Database
+### Backend
+
+![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Passport](https://img.shields.io/badge/Passport-34E27A?style=for-the-badge&logo=passport&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+
+### Data
 
 ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 
-### AI & Machine Learning
+The backend also uses bcrypt, `better-sqlite3`, class-validator, class-transformer, and Vitest.
 
-- Large Language Models (LLMs)
-- Retrieval-Augmented Generation (RAG)
-- Text Embeddings
-- Vector Similarity Search
+## Features
 
-## ⚙️ Main Features
+The current application scope includes:
 
-- 📁 Document upload and management (PDF, DOC, DOCX, TXT and source code files)
-- 🧠 AI-powered document analysis
-- 🗂️ Automatic document categorization
-- 🏷️ AI-generated tags and descriptions
-- 📚 Collection and category management
-- 🔄 Automatic category suggestions and assignment
-- 🔍 Semantic document search
-- 💬 AI-powered question answering based on uploaded materials
-- 📖 Context-aware responses with source references
-- 🔗 Document and content retrieval using RAG
-- ✏️ Manual document and category management
+- first-run setup and administrator account creation,
+- user login and logout,
+- active session validation,
+- protected application views,
+- home, chat, library, and settings interfaces,
+- REST APIs for users, documents, conversations, and messages,
+- automatic local SQLite database initialization.
 
-## 🏗️ System Architecture
+The database is prepared for documents and content chunks with embedded vectors. Semantic search and AI responses are not yet connected to the interface.
 
-Knowly follows a client-server architecture consisting of two main components:
+## Project Structure
 
-| Component | Technology | Description |
-|---|---|---|
-| Backend | Python + FastAPI | REST API, business logic and AI integration |
-| Frontend | React + Vite + TypeScript | User interface and document management |
-| Database | SQLite | Storage of document metadata, categories and collections |
-| AI Layer | LLM + RAG | Document analysis, categorization and question answering |
-| Vector Search | Embeddings | Semantic retrieval of relevant document content |
-
-## 📂 Supported File Formats
-
-| Format | Description |
-|---|---|
-| PDF | Portable Document Format |
-| DOC | Microsoft Word documents |
-| DOCX | Microsoft Word Open XML documents |
-| TXT | Plain text files |
-| PY | Python source code |
-| JS / TS | JavaScript and TypeScript source code |
-| Other | Additional supported text-based formats |
-
-## 🛠️ Installation
-
-### 1. Clone the repository
-
-```bash
-git clone <repository-url>
-cd knowly
+```text
+.
+├── backend/
+│   ├── src/
+│   │   ├── auth/          # Login, sessions, and JWT guard
+│   │   ├── setup/         # First-run setup
+│   │   ├── users/         # Users
+│   │   ├── documents/     # Document API
+│   │   ├── conversations/ # Conversations
+│   │   ├── messages/      # Messages
+│   │   └── database/      # SQLite integration
+│   └── data/              # SQLite database and runtime data
+├── frontend/
+│   └── src/
+│       ├── components/    # Shared interface components
+│       ├── pages/         # Application views
+│       └── services/      # API communication
+└── database/
+    └── schema.sql         # Database schema
 ```
 
-### 2. Backend setup
+## Requirements
 
-```bash
-cd knowly-backend
+- Node.js
+- npm
 
-python -m venv .venv
+## Installation and Running
+
+### 1. Backend
+
+```powershell
+cd backend
+npm install
+npm run start:dev
 ```
 
-Activate the virtual environment:
+The backend runs at `http://localhost:3000` by default.
 
-```bash
-# Windows
-.venv\Scripts\activate
+During the first startup, the application:
 
-# Linux / macOS
-source .venv/bin/activate
+- creates the `backend/data` directory,
+- initializes `backend/data/local-mind.sqlite` using `database/schema.sql`,
+- creates `backend/.env` when it does not exist,
+- generates a random `JWT_SECRET`.
+
+Example environment variables:
+
+```dotenv
+JWT_SECRET=<generated-random-secret>
+NODE_ENV=development
 ```
 
-Install dependencies:
+Do not use an existing production secret or commit the `.env` file.
 
-```bash
-pip install -r requirements.txt
-```
+### 2. Frontend
 
-Configure environment variables using the provided `.env.example` file.
+In a second terminal:
 
-Start the backend:
-
-```bash
-fastapi dev app/main.py
-```
-
-### 3. Frontend setup
-
-Open another terminal:
-
-```bash
-cd knowly-frontend
-
+```powershell
+cd frontend
 npm install
 npm run dev
 ```
 
-## 🌐 Development URLs
+The frontend runs at `http://localhost:5173`.
 
-| Service | URL |
-|---|---|
-| Backend API | http://localhost:8000 |
-| API Documentation (Swagger) | http://localhost:8000/docs |
-| API Documentation (ReDoc) | http://localhost:8000/redoc |
-| Frontend | http://localhost:5173 |
+### 3. Initial Setup
 
-## 👨‍💻 Author
+After starting both services, open `http://localhost:5173`. If the database does not contain an administrator account, the application displays the initial setup form.
+
+After creating the administrator, log in with the provided email address and password.
+
+## Scripts
+
+### Backend
+
+```powershell
+cd backend
+npm run start:dev  # Development server with watch mode
+npm run build      # Production build
+npm run start:prod # Run the compiled application
+npm run lint       # Code quality checks
+npm run test       # Unit tests
+npm run test:e2e   # End-to-end tests
+```
+
+### Frontend
+
+```powershell
+cd frontend
+npm run dev     # Development server
+npm run build   # TypeScript check and production build
+npm run preview # Preview the build
+npm run lint    # Code quality checks
+```
+
+## Main API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/setup/status` | Checks whether the application is configured |
+| `POST` | `/setup/initialize` | Creates the administrator account |
+| `POST` | `/auth/login` | Logs in a user |
+| `GET` | `/auth/me` | Checks the current session |
+| `POST` | `/auth/logout` | Logs out a user |
+| `GET` | `/users` | Lists users |
+| `CRUD` | `/documents` | Manages documents |
+| `CRUD` | `/conversations` | Manages conversations |
+| `CRUD` | `/messages` | Manages messages |
+
+Most REST modules are protected by the JWT guard. `/setup/status`, `/setup/initialize`, and login are public.
+
+## Database
+
+The schema is located in [`database/schema.sql`](./database/schema.sql). It contains the following tables:
+
+- `users`,
+- `documents`,
+- `document_chunks`,
+- `conversations`,
+- `messages`,
+- `auth_sessions`.
+
+The first startup also creates indexes and triggers that update `updated_at` fields.
+
+## Author
 
 **Maciej Stępień**
 

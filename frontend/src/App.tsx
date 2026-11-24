@@ -21,21 +21,26 @@ import Settings from './pages/Settings/Settings.tsx';
 import About from './pages/About/About.tsx';
 
 import { checkSetupStatus } from './services/setup.ts';
+import { checkAuthentication } from './services/auth.ts';
 
 type AppStatus = 'loading' | 'setup' | 'ready' | 'error';
 
 function App() {
   const [status, setStatus] = useState<AppStatus>('loading');
+  const [authenticated, setAuthenticated] = useState(false);
   const [error, setError] = useState('');
 
   async function checkSetup() {
     try {
-      setStatus('loading');
-      setError('');
-
       const initialized = await checkSetupStatus();
 
-      setStatus(initialized ? 'ready' : 'setup');
+      if (!initialized) {
+        setStatus('setup');
+        return;
+      }
+
+      setAuthenticated(await checkAuthentication());
+      setStatus('ready');
     } catch (err) {
       console.error(err);
 
@@ -63,7 +68,15 @@ function App() {
         <div>
           <h2>Nie udało się uruchomić local.mind</h2>
           <p>{error}</p>
-          <button onClick={checkSetup}>Spróbuj ponownie</button>
+          <button
+            onClick={() => {
+              setStatus('loading');
+              setError('');
+              void checkSetup();
+            }}
+          >
+            Spróbuj ponownie
+          </button>
         </div>
       )}
 
@@ -73,24 +86,35 @@ function App() {
 
       {status === 'ready' && (
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/login"
+            element={
+              authenticated
+                ? <Navigate to="/" replace />
+                : <Login onLogin={() => setAuthenticated(true)} />
+            }
+          />
 
           <Route
             path="/*"
             element={
-              <div className="layout">
-                <Aside />
+              authenticated
+                ? (
+                  <div className="layout">
+                    <Aside />
 
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/home" element={<Home />} />
-                  <Route path="/chat" element={<Chat />} />
-                  <Route path="/library" element={<Library />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </div>
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/home" element={<Home />} />
+                      <Route path="/chat" element={<Chat />} />
+                      <Route path="/library" element={<Library />} />
+                      <Route path="/settings" element={<Settings />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
+                  </div>
+                )
+                : <Navigate to="/login" replace />
             }
           />
         </Routes>
