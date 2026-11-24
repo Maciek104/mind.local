@@ -1,0 +1,49 @@
+.welcome {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 8px;
+    
+    width: 100%;
+    height: 96px;
+
+    background: linear-gradient(
+        -45deg,
+        darkslategray,
+        darkslateblue
+    );
+
+    padding: 16px;
+
+    border-radius: 16px;
+}
+
+.welcome .column {
+    display: flex;
+    flex-direction: column;
+}
+
+.welcome .title {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: whitesmoke;
+}
+
+.welcome .subtitle {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    color: whitesmoke;
+}
+
+.welcome .icon {
+    width: 48px;
+    height: 48px;
+
+    padding: 8px;
+
+    border: solid 1px lightgray;
+    border-radius: 16px;
+}

@@ -1,0 +1,27 @@
+.chat {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat .layout {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 24px;
+    
+    background-color: whitesmoke;
+}
+
+.chat .layout .row {
+    display: flex;
+    
+    gap: 24px;
+
+    width: 100%;
+    height: 100%;
+
+    margin-top: 24px;
+}

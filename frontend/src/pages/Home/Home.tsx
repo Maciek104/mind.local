@@ -2,14 +2,23 @@ import "./Home.css"
 
 import Nav from "../../components/Nav/Nav.tsx"
 import Footer from "../../components/Footer/Footer.tsx"
+import Welcome from "../../components/Welcome/Welcome.tsx"
+import Chat from "../../components/Chat/Chat.tsx"
+import Library from "../../components/LastFiles/LastFiles.tsx"
 
 function Home() {
     return (        
         <div className="home">
             <Nav page="HOME" />
 
-            <h1>Welcome to Knowly!</h1>
-            <p>Knowly is a knowledge management application that helps you organize and access your information efficiently.</p>
+            <div className="layout">
+                <Welcome />
+            
+                <div className="row">
+                    <Library />
+                    <Chat />
+                </div>
+            </div>
 
             <Footer />
         </div>
