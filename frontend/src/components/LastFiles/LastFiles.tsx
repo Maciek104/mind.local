@@ -23,7 +23,7 @@ function LastFiles() {
             })
             .catch((err: unknown) => {
                 if (isActive) {
-                    setError(err instanceof Error ? err.message : "Could not load files.");
+                    setError(err instanceof Error ? err.message : "Could not load the latest files.");
                 }
             })
             .finally(() => {
@@ -40,7 +40,7 @@ function LastFiles() {
     return(
         <div className="last-files">
             <Link to="/library" className="title">
-                <img src={libraryIcon} alt="chat icon" className="icon" />
+                <img src={libraryIcon} alt="" className="icon" />
                 Last files
             </Link>
 
@@ -50,7 +50,7 @@ function LastFiles() {
                 ) : error ? (
                     <p className="files-message files-error">{error}</p>
                 ) : documents.length === 0 ? (
-                    <p className="files-message">No files added yet.</p>
+                    <p className="files-message">No files have been added yet.</p>
                 ) : (
                     <ul className="file-list">
                         {documents.map((document) => (
@@ -58,7 +58,7 @@ function LastFiles() {
                                 <Link to="/library" className="file">
                                     <span className="file-name">{document.originalName}</span>
                                     <time dateTime={document.createdAt}>
-                                        {new Date(document.createdAt).toLocaleDateString("pl-PL")}
+                                        {new Date(document.createdAt).toLocaleDateString("en-GB")}
                                     </time>
                                 </Link>
                             </li>
@@ -69,7 +69,7 @@ function LastFiles() {
 
             <Link to="/library" className="button">
                 <img src={addFileIcon} alt="add file icon" className="icon" />
-                Add files...
+                Add files
             </Link>
         </div>
     )

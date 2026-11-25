@@ -30,7 +30,7 @@ export class DocumentsService {
 
   create(userId: string, file: Express.Multer.File) {
     if (file.size === 0) {
-      throw new BadRequestException('Plik jest pusty');
+      throw new BadRequestException('The file is empty.');
     }
 
     const documentsDirectory = path.join(
@@ -138,7 +138,7 @@ export class DocumentsService {
     const row = this.findRow(userId, id);
 
     if (!fs.existsSync(row.storage_path)) {
-      throw new NotFoundException('Plik nie znajduje się już na dysku');
+      throw new NotFoundException('The file is no longer available on disk.');
     }
 
     return {
@@ -158,7 +158,7 @@ export class DocumentsService {
       .get(id, userId) as DocumentRow | undefined;
 
     if (!row) {
-      throw new NotFoundException('Nie znaleziono dokumentu');
+      throw new NotFoundException('Document not found.');
     }
 
     return row;

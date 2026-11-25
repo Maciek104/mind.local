@@ -17,7 +17,7 @@ async function parseError(response: Response): Promise<string> {
   if (Array.isArray(data?.message)) {
     return data.message.join(', ');
   }
-  return data?.message || 'Operacja na dokumencie nie powiodła się.';
+  return data?.message || 'The document operation failed.';
 }
 
 export async function listDocuments(): Promise<DocumentItem[]> {

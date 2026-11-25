@@ -41,7 +41,7 @@ export class DocumentsController {
     @UploadedFile() file: Express.Multer.File | undefined,
   ) {
     if (!file) {
-      throw new BadRequestException('Nie przesłano pliku');
+      throw new BadRequestException('No file was uploaded.');
     }
 
     return this.documentsService.create(request.user.id, file);

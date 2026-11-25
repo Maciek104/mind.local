@@ -4,54 +4,102 @@
 
     flex: 1;
     min-width: 0;
-    min-height: 100vh;
+    min-height: 0;
+
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .library .layout {
     display: flex;
+    flex: 0 0 auto;
     flex-direction: column;
 
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
+    margin: 24px;
+}
 
-    padding: 24px;
-    
-    background-color: whitesmoke;
+.library > .nav,
+.library > .footer {
+    flex: 0 0 51.786px;
+    height: 51.786px;
 }
 
 .library .layout .row {
     display: flex;
-    
     gap: 24px;
 
-    width: 100%;
-    height: 100%;
-
+    min-width: 0;
     margin-top: 24px;
 }
 
 .library .upload-panel {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 16px;
-    padding: 20px;
+    justify-content: center;
+    gap: 12px;
+    min-height: 144px;
+    padding: 24px;
     border: 1px dashed darkgray;
-    border-radius: 8px;
-    background: white;
+    border-radius: 16px;
+    background: whitesmoke;
+    text-align: center;
+}
+
+.library .upload-panel.is-dragging {
+    border-color: darkslateblue;
+    background: lavender;
 }
 
 .library .upload-panel input {
     display: none;
 }
 
-.library .upload-panel button,
-.library .document-actions button {
+.library button {
+    display: flex;
+    flex: 0 0 96px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+
+    width: 96px;
+    height: 32px;
+    padding: 8px;
+
     border: 0;
-    border-radius: 6px;
-    padding: 10px 16px;
-    background: darkslategray;
-    color: white;
+    border-radius: 16px;
+    background: linear-gradient(-45deg, darkslategray, darkslateblue);
+    color: whitesmoke;
+    font-family: inherit;
+    font-size: 14px;
     cursor: pointer;
+}
+
+.library button .icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.library .upload-button {
+    flex-basis: 32px;
+    width: 140px;
+}
+
+.library .download-button,
+.library .delete-button {
+    flex-basis: 32px;
+    width: 32px;
+}
+
+.library .download-button .icon,
+.library .delete-button .icon {
+    width: 16px;
+    height: 16px;
 }
 
 .library .upload-panel button:disabled {
@@ -80,18 +128,55 @@
 .library .document-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
+    margin-top: 24px;
+
+    border-radius: 16px;
+    background: whitesmoke;
+}
+
+.library .document-list-title {
+    display: flex;
+    flex: 0 0 48px;
+    align-items: center;
+    gap: 4px;
+
+    width: 100%;
+    height: 48px;
+    padding: 8px 16px;
+
+    color: whitesmoke;
+    background: linear-gradient(-45deg, darkslategray, darkslateblue);
+    border-radius: 16px 16px 0 0;
+}
+
+.library .document-list-title h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.library .document-list-title .icon {
+    width: 20px;
+    height: 20px;
 }
 
 .library .document-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
-    padding: 16px;
-    border-radius: 8px;
-    background: white;
+    gap: 18px;
+    padding: 8px;
+    background: whitesmoke;
+    border-bottom: solid 1px lightgray;
+}
+
+.library .document-summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px;
+    color: dimgray;
+    font-size: 12px;
 }
 
 .library .document-details {
@@ -103,12 +188,14 @@
 .library .document-details strong {
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .library .document-details span {
-    margin-top: 4px;
+    margin-top: 2px;
     color: dimgray;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .library .document-actions {

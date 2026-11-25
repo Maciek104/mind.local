@@ -47,7 +47,8 @@
     height: 20px;
 }
 
-.aside .link:hover {
+.aside .link:hover,
+.aside .link.active {
     padding-left: 5px;
     background-color: rgba(255, 255, 255, 0.1);
     border-left: 3px solid white;
