@@ -29,3 +29,98 @@
 
     margin-top: 24px;
 }
+
+.library .upload-panel {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    border: 1px dashed darkgray;
+    border-radius: 8px;
+    background: white;
+}
+
+.library .upload-panel input {
+    display: none;
+}
+
+.library .upload-panel button,
+.library .document-actions button {
+    border: 0;
+    border-radius: 6px;
+    padding: 10px 16px;
+    background: darkslategray;
+    color: white;
+    cursor: pointer;
+}
+
+.library .upload-panel button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.library .upload-panel span {
+    color: dimgray;
+    font-size: 14px;
+}
+
+.library-error,
+.library-empty {
+    margin-top: 20px;
+}
+
+.library-error {
+    color: darkred;
+}
+
+.library-empty {
+    color: dimgray;
+}
+
+.library .document-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.library .document-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    background: white;
+}
+
+.library .document-details {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.library .document-details strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.library .document-details span {
+    margin-top: 4px;
+    color: dimgray;
+    font-size: 13px;
+}
+
+.library .document-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.library .document-actions a {
+    padding: 10px 16px;
+    border: 1px solid darkslategray;
+    border-radius: 6px;
+    color: darkslategray;
+    text-decoration: none;
+}
