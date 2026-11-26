@@ -60,9 +60,34 @@ export class DatabaseService implements OnModuleDestroy {
       console.log('Database initialized successfully!');
     } else {
       console.log('Database schema already exists.');
+      this.ensureUserColumns();
     }
 
     console.log(`SQLite connected: ${databasePath}`);
+  }
+
+  private ensureUserColumns(): void {
+    const columns = this.db
+      .prepare('PRAGMA table_info(users)')
+      .all() as Array<{ name: string }>;
+    const columnNames = new Set(columns.map((column) => column.name));
+
+    if (!columnNames.has('display_name')) {
+      this.db.exec('ALTER TABLE users ADD COLUMN display_name TEXT');
+    }
+    if (!columnNames.has('bio')) {
+      this.db.exec('ALTER TABLE users ADD COLUMN bio TEXT');
+    }
+    if (!columnNames.has('profile_image_path')) {
+      this.db.exec(
+        'ALTER TABLE users ADD COLUMN profile_image_path TEXT',
+      );
+    }
+    if (!columnNames.has('plan')) {
+      this.db.exec(
+        "ALTER TABLE users ADD COLUMN plan TEXT NOT NULL DEFAULT 'FREE'",
+      );
+    }
   }
 
   get connection(): Database.Database {

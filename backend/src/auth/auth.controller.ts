@@ -18,6 +18,10 @@ interface AuthenticatedRequest extends Request {
   user: {
     id: string;
     email: string;
+    display_name: string | null;
+    bio: string | null;
+    profile_image_path: string | null;
+    plan: string;
     role: string;
     sessionId: string;
   };
@@ -73,6 +77,10 @@ export class AuthController {
       user: {
         id: request.user.id,
         email: request.user.email,
+        display_name: request.user.display_name,
+        bio: request.user.bio,
+        profile_image_path: request.user.profile_image_path,
+        plan: request.user.plan,
         role: request.user.role,
       },
     };

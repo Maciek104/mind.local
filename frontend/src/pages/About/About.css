@@ -4,28 +4,131 @@
 
     flex: 1;
     min-width: 0;
-    min-height: 100vh;
+    height: 100vh;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .about .layout {
     display: flex;
+    flex: 1 0 auto;
     flex-direction: column;
-
-    width: 100%;
-    height: 100%;
-
-    padding: 24px;
-    
-    background-color: whitesmoke;
-}
-
-.about .layout .row {
-    display: flex;
-    
     gap: 24px;
 
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
+    margin: 24px 24px 0;
+}
 
+.about > .nav,
+.about > .footer {
+    flex: 0 0 51.786px;
+    height: 51.786px;
+}
+
+.about > .footer {
     margin-top: 24px;
+}
+
+.about-intro {
+    overflow: hidden;
+}
+
+.about-intro-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    background: whitesmoke;
+    color: darkslategray;
+}
+
+.about-intro-content h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.about-intro-content p,
+.about-card p,
+.about-creators-content p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.about-section {
+    border-radius: 16px;
+    background: whitesmoke;
+}
+
+.about-section-title {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    height: 48px;
+    padding: 8px;
+
+    border-radius: 16px 16px 0 0;
+    background: linear-gradient(-45deg, darkslategray, darkslateblue);
+    color: whitesmoke;
+}
+
+.about-section-title img {
+    width: 20px;
+    height: 20px;
+}
+
+.about-section-title h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.about-features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.about-card {
+    min-width: 0;
+    padding: 8px;
+    border-radius: 16px;
+    background: whitesmoke;
+    color: darkslategray;
+}
+
+.about-card img {
+    display: block;
+    width: 32px;
+    height: 32px;
+    padding: 8px;
+    border-radius: 16px;
+    background: linear-gradient(-45deg, darkslategray, darkslateblue);
+}
+
+.about-card h3 {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.about-card p {
+    color: dimgray;
+}
+
+.about-creators-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    color: darkslategray;
+}
+
+@media (max-width: 720px) {
+    .about-features {
+        grid-template-columns: 1fr;
+    }
 }

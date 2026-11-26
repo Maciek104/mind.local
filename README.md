@@ -1,66 +1,66 @@
 # local.mind
 
-**local.mind** is a local knowledge-management application for working with documents and conversations. The project consists of a React web application and a NestJS API backed by SQLite.
+**local.mind** is a local-first knowledge-management application for organizing documents and personal information. It consists of a React frontend and a NestJS API backed by SQLite.
 
-> The project is under active development. Authentication, initial setup, and the database structure are implemented; the library, chat, and document modules are still being developed.
+> The project is under active development. Authentication, user profiles, and basic document-library operations are implemented. The chat, notes, and settings views are currently placeholders; AI responses and semantic search are not connected.
 
-## Technologies
+## Features and project status
+
+### Implemented
+
+- First-run setup for creating the initial administrator.
+- Login and logout using an HTTP-only session cookie, JWT validation, and server-side session records.
+- Protected application pages and user profile management:
+  - display name and bio,
+  - plan and role information,
+  - profile avatar upload, retrieval, and removal.
+- Application navigation includes Home, Chat, Notes, Library, Settings, About, and Account pages.
+- Document library operations:
+  - upload files up to 25 MB,
+  - list, rename, download, and delete a user's documents.
+- Local SQLite database initialization, foreign-key constraints, indexes, and update triggers.
+- About page describing the project, its capabilities, and its creators.
+
+### In progress or not yet implemented
+
+- Chat, Notes, and Settings currently contain their page shells, but do not yet provide their planned functionality.
+- Conversation and message API modules are NestJS scaffolds; their service methods currently return placeholder values and do not persist data.
+- The database schema includes document chunks and a field for BGE-M3 embeddings, but document extraction, chunking, embedding generation, semantic search, and AI responses are not connected to the application.
+
+## Technology
 
 ### Frontend
 
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white)
+- React 19, TypeScript, Vite, and React Router
 
 ### Backend
 
-![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Passport](https://img.shields.io/badge/Passport-34E27A?style=for-the-badge&logo=passport&logoColor=white)
-![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+- NestJS 12 and TypeScript
+- SQLite through `better-sqlite3`
+- JWT, bcrypt, cookie-parser, and Multer
+- Request validation with `class-validator` and `class-transformer`
 
-### Data
-
-![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
-
-The backend also uses bcrypt, `better-sqlite3`, class-validator, class-transformer, and Vitest.
-
-## Features
-
-The current application scope includes:
-
-- first-run setup and administrator account creation,
-- user login and logout,
-- active session validation,
-- protected application views,
-- home, chat, library, and settings interfaces,
-- REST APIs for users, documents, conversations, and messages,
-- automatic local SQLite database initialization.
-
-The database is prepared for documents and content chunks with embedded vectors. Semantic search and AI responses are not yet connected to the interface.
-
-## Project Structure
+## Project structure
 
 ```text
 .
 ├── backend/
 │   ├── src/
-│   │   ├── auth/          # Login, sessions, and JWT guard
-│   │   ├── setup/         # First-run setup
-│   │   ├── users/         # Users
-│   │   ├── documents/     # Document API
-│   │   ├── conversations/ # Conversations
-│   │   ├── messages/      # Messages
-│   │   └── database/      # SQLite integration
-│   └── data/              # SQLite database and runtime data
-├── frontend/
-│   └── src/
-│       ├── components/    # Shared interface components
-│       ├── pages/         # Application views
-│       └── services/      # API communication
-└── database/
-    └── schema.sql         # Database schema
+│   │   ├── auth/          # Login, logout, session validation, and JWT guard
+│   │   ├── setup/         # First-run administrator setup
+│   │   ├── users/         # User profiles and avatar operations
+│   │   ├── documents/     # Document upload and library API
+│   │   ├── conversations/ # Conversation API scaffold
+│   │   ├── messages/      # Message API scaffold
+│   │   └── database/      # SQLite initialization and migrations
+│   └── data/              # Runtime database, documents, and avatars
+├── database/
+│   └── schema.sql         # SQLite schema
+└── frontend/
+    └── src/
+        ├── components/    # Shared interface components
+        ├── pages/         # Application pages
+        └── services/      # API clients
 ```
 
 ## Requirements
@@ -68,9 +68,9 @@ The database is prepared for documents and content chunks with embedded vectors.
 - Node.js
 - npm
 
-## Installation and Running
+## Run locally
 
-### 1. Backend
+### 1. Start the backend
 
 ```powershell
 cd backend
@@ -78,27 +78,13 @@ npm install
 npm run start:dev
 ```
 
-The backend runs at `http://localhost:3000` by default.
+The API listens at `http://localhost:3000`.
 
-During the first startup, the application:
+On startup, the backend creates `backend/data/` and initializes `local-mind.sqlite` from `database/schema.sql` when the database is new. It also creates a `.env` file with a generated `JWT_SECRET` if one does not exist. Keep `.env` private and do not commit secrets.
 
-- creates the `backend/data` directory,
-- initializes `backend/data/local-mind.sqlite` using `database/schema.sql`,
-- creates `backend/.env` when it does not exist,
-- generates a random `JWT_SECRET`.
+### 2. Start the frontend
 
-Example environment variables:
-
-```dotenv
-JWT_SECRET=<generated-random-secret>
-NODE_ENV=development
-```
-
-Do not use an existing production secret or commit the `.env` file.
-
-### 2. Frontend
-
-In a second terminal:
+In another terminal:
 
 ```powershell
 cd frontend
@@ -106,69 +92,73 @@ npm install
 npm run dev
 ```
 
-The frontend runs at `http://localhost:5173`.
+Open `http://localhost:5173`. The frontend currently uses the API at `http://localhost:3000`.
 
-### 3. Initial Setup
+### 3. Initial setup
 
-After starting both services, open `http://localhost:5173`. If the database does not contain an administrator account, the application displays the initial setup form.
+When no administrator account exists, the application displays the setup form. Create the initial administrator there, then sign in with the email and password you chose.
 
-After creating the administrator, log in with the provided email address and password.
-
-## Scripts
+## Development commands
 
 ### Backend
 
 ```powershell
 cd backend
-npm run start:dev  # Development server with watch mode
-npm run build      # Production build
-npm run start:prod # Run the compiled application
-npm run lint       # Code quality checks
-npm run test       # Unit tests
-npm run test:e2e   # End-to-end tests
+npm run start:dev
+npm run build
+npm run lint
+npm run test
+npm run test:e2e
 ```
+
+Other scripts include `npm start`, `npm run start:prod`, `npm run start:debug`, `npm run test:watch`, and `npm run format`.
 
 ### Frontend
 
 ```powershell
 cd frontend
-npm run dev     # Development server
-npm run build   # TypeScript check and production build
-npm run preview # Preview the build
-npm run lint    # Code quality checks
+npm run dev
+npm run build
+npm run lint
+npm run preview
 ```
 
-## Main API Endpoints
+## API overview
+
+The global authentication guard protects API routes by default. Setup status, setup initialization, and login are public. The frontend authenticates with the HTTP-only `local_mind_session` cookie.
 
 | Method | Endpoint | Description |
 |---|---|---|
-| `GET` | `/setup/status` | Checks whether the application is configured |
-| `POST` | `/setup/initialize` | Creates the administrator account |
-| `POST` | `/auth/login` | Logs in a user |
-| `GET` | `/auth/me` | Checks the current session |
-| `POST` | `/auth/logout` | Logs out a user |
-| `GET` | `/users` | Lists users |
-| `CRUD` | `/documents` | Manages documents |
-| `CRUD` | `/conversations` | Manages conversations |
-| `CRUD` | `/messages` | Manages messages |
+| `GET` | `/setup/status` | Check whether initial setup is complete (public) |
+| `POST` | `/setup/initialize` | Create the initial administrator (public) |
+| `POST` | `/auth/login` | Sign in and create a session (public) |
+| `GET` | `/auth/me` | Return the current authenticated user |
+| `POST` | `/auth/logout` | End the current session |
+| `GET`, `POST` | `/users` | List users or create a user |
+| `GET`, `PATCH`, `DELETE` | `/users/:id` | Read, update, or delete a user |
+| `GET`, `PATCH` | `/users/me` | Read or update the current user's profile |
+| `POST`, `GET`, `DELETE` | `/users/me/avatar` | Upload (up to 5 MB), retrieve, or remove the current user's avatar |
+| `GET`, `POST` | `/documents` | List documents or upload one using multipart field `file` (up to 25 MB) |
+| `GET`, `PATCH`, `DELETE` | `/documents/:id` | Read, rename, or delete a document |
+| `GET` | `/documents/:id/download` | Download a document |
+| `CRUD` | `/conversations`, `/messages` | Scaffold routes; persistence and functional operations are not implemented |
 
-Most REST modules are protected by the JWT guard. `/setup/status`, `/setup/initialize`, and login are public.
+Document operations are scoped to the authenticated user. Uploaded files and avatars are saved under `backend/data/`; their metadata is kept in SQLite.
 
 ## Database
 
-The schema is located in [`database/schema.sql`](./database/schema.sql). It contains the following tables:
+The schema is in [`database/schema.sql`](./database/schema.sql). It defines:
 
-- `users`,
-- `documents`,
-- `document_chunks`,
-- `conversations`,
-- `messages`,
-- `auth_sessions`.
+- `users` — credentials, profile fields, plan, role, and active status,
+- `auth_sessions` — session identifiers and expiration times,
+- `documents` — document metadata and processing status,
+- `document_chunks` — text chunks and an optional serialized embedding,
+- `conversations` and `messages` — schema for planned conversation functionality.
 
-The first startup also creates indexes and triggers that update `updated_at` fields.
+SQLite foreign keys and WAL mode are enabled. The backend applies user-profile column additions to an existing database at startup.
 
-## Author
+## Creators
 
-**Maciej Stępień**
-
-- GitHub: [@Maciek104](https://github.com/Maciek104)
+- **Maciej Stępień** — [@Maciek104](https://github.com/Maciek104)
+- **Paweł Kieliszak** — @kaszlak
+- **HanzaStudios** — project association

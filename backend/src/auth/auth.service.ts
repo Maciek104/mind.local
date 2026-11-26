@@ -29,6 +29,10 @@ export class AuthService {
           id,
           email,
           password_hash,
+          display_name,
+          bio,
+          profile_image_path,
+          plan,
           role,
           is_active
         FROM users
@@ -40,6 +44,10 @@ export class AuthService {
           id: string;
           email: string;
           password_hash: string;
+          display_name: string | null;
+          bio: string | null;
+          profile_image_path: string | null;
+          plan: string;
           role: string;
           is_active: number;
         }
@@ -88,6 +96,10 @@ export class AuthService {
       user: {
         id: user.id,
         email: user.email,
+        display_name: user.display_name,
+        bio: user.bio,
+        profile_image_path: user.profile_image_path,
+        plan: user.plan,
         role: user.role,
       },
       expiresAt,
@@ -100,6 +112,10 @@ export class AuthService {
         SELECT
           id,
           email,
+          display_name,
+          bio,
+          profile_image_path,
+          plan,
           role
         FROM users
         WHERE id = ?

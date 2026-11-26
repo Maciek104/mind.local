@@ -16,9 +16,11 @@ import Login from './pages/Login/Login.tsx';
 
 import Home from './pages/Home/Home.tsx';
 import Chat from './pages/Chat/Chat.tsx';
+import Notes from './pages/Notes/Notes.tsx';
 import Library from './pages/Library/Library.tsx';
 import Settings from './pages/Settings/Settings.tsx';
 import About from './pages/About/About.tsx';
+import Account from './pages/Account/Account.tsx';
 
 import { checkSetupStatus } from './services/setup.ts';
 import { checkAuthentication } from './services/auth.ts';
@@ -107,9 +109,11 @@ function App() {
                       <Route path="/" element={<Home />} />
                       <Route path="/home" element={<Home />} />
                       <Route path="/chat" element={<Chat />} />
+                      <Route path="/notes" element={<Notes />} />
                       <Route path="/library" element={<Library />} />
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/about" element={<About />} />
+                      <Route path="/account" element={<Account />} />
                       <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                   </div>

@@ -4,6 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 
 import homeIcon from '../../assets/icons/home.svg'
 import chatIcon from '../../assets/icons/chat.svg'
+import notesIcon from '../../assets/icons/notes.svg'
 import libraryIcon from '../../assets/icons/library_books.svg'
 import settingsIcon from '../../assets/icons/settings.svg'
 import aboutIcon from '../../assets/icons/info.svg'
@@ -30,6 +31,10 @@ function Aside() {
         <NavLink className="link" to="/chat" end>
             <img className="icon" src={chatIcon} alt="chat icon" />
             CHAT
+        </NavLink>
+        <NavLink className="link" to="/notes" end>
+            <img className="icon" src={notesIcon} alt="notes icon" />
+            NOTES
         </NavLink>
         <NavLink className="link" to="/library" end>
             <img className="icon" src={libraryIcon} alt="library icon" />

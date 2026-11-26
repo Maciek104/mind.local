@@ -12,6 +12,10 @@ CREATE TABLE users (
 
     email TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
+    display_name TEXT,
+    bio TEXT,
+    profile_image_path TEXT,
+    plan TEXT NOT NULL DEFAULT 'FREE',
 
     role TEXT NOT NULL DEFAULT 'USER'
         CHECK (role IN ('USER', 'ADMIN')),

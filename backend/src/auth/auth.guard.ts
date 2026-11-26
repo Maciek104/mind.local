@@ -16,6 +16,10 @@ import type { Request } from 'express';
 interface AuthenticatedUser {
   id: string;
   email: string;
+  display_name: string | null;
+  bio: string | null;
+  profile_image_path: string | null;
+  plan: string;
   role: string;
   sessionId: string;
 }
@@ -92,7 +96,14 @@ export class AuthGuard implements CanActivate {
 
       const user = this.database.connection
         .prepare(`
-          SELECT id, email, role
+          SELECT
+            id,
+            email,
+            display_name,
+            bio,
+            profile_image_path,
+            plan,
+            role
           FROM users
           WHERE id = ?
             AND is_active = 1
@@ -102,6 +113,10 @@ export class AuthGuard implements CanActivate {
         | {
             id: string;
             email: string;
+            display_name: string | null;
+            bio: string | null;
+            profile_image_path: string | null;
+            plan: string;
             role: string;
           }
         | undefined;

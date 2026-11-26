@@ -5,6 +5,7 @@
     height: 64px;
 
     padding-left: 24px;
+    box-sizing: border-box;
 
     background-color: lightgray;
 }
@@ -30,4 +31,36 @@
     font-size: 24px;
     font-weight: bold;
     color: darkslategray;
+}
+
+.nav .account-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 32px;
+    height: 32px;
+
+    aspect-ratio: 1/1;
+
+    margin-left: auto;
+    margin-right: 24px;
+    align-self: center;
+
+    padding: 4px;
+    box-sizing: border-box;
+
+    background: linear-gradient(
+        -45deg,
+        darkslategray,
+        darkslateblue
+    );
+
+    text-decoration: none;
+    border-radius: 16px;
+}
+
+.nav .account-icon {
+    width: 16px;
+    height: 16px;
 }

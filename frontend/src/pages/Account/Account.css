@@ -1,0 +1,304 @@
+.account {
+    display: flex;
+    flex-direction: column;
+
+    flex: 1;
+    min-width: 0;
+    height: 100vh;
+    min-height: 0;
+
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.account .layout {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 24px;
+
+    width: auto;
+    height: auto;
+    margin: 24px 24px 0;
+}
+
+.account > .nav,
+.account > .footer {
+    flex: 0 0 51.786px;
+    height: 51.786px;
+}
+
+.account > .footer {
+    margin-top: 24px;
+}
+
+.account-summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    width: 100%;
+    height: 96px;
+    padding: 16px;
+
+    border-radius: 16px;
+    background: linear-gradient(-45deg, darkslategray, darkslateblue);
+    color: whitesmoke;
+}
+
+.profile-image {
+    position: relative;
+    display: flex;
+    flex: 0 0 64px;
+    justify-content: center;
+    align-items: center;
+
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    max-width: 64px;
+    aspect-ratio: 1 / 1;
+    box-sizing: border-box;
+
+    border: solid 1px lightgray;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-image .profile-fallback {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+}
+
+.account-summary-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.account-summary-content h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.account-summary-content span {
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+.account-form {
+    border-radius: 16px;
+    background: whitesmoke;
+}
+
+.account-form-title {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    height: 48px;
+    padding: 8px 16px;
+
+    color: whitesmoke;
+    background: linear-gradient(-45deg, darkslategray, darkslateblue);
+    border-radius: 16px 16px 0 0;
+}
+
+.account-form-title .icon {
+    width: 20px;
+    height: 20px;
+}
+
+.account-form-title h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.account-form-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 8px;
+}
+
+.account-field {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.account-error,
+.account-success,
+.account-actions {
+    grid-column: 1 / -1;
+}
+
+.account-profile-row {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+}
+
+.account-profile-row .account-field {
+    flex: 4;
+}
+
+.account-profile-row .avatar-button {
+    flex: 1;
+    min-width: 120px;
+}
+
+.account-form-content input,
+.account-form-content textarea {
+    width: 100%;
+    box-sizing: border-box;
+
+    border: none;
+    border-radius: 16px;
+    background: white;
+    color: darkslategray;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.account-form-content input {
+    height: 32px;
+    padding: 0 12px;
+}
+
+.account-form-content textarea {
+    height: 160px;
+    padding: 12px;
+    resize: vertical;
+}
+
+.account-error,
+.account-success {
+    font-size: 14px;
+}
+
+.account-error {
+    color: darkred;
+}
+
+.account-success {
+    color: darkgreen;
+}
+
+.account-actions {
+    display: grid;
+    grid-template-columns: 1fr 96px;
+    gap: 8px;
+}
+
+.account-action-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+
+    height: 32px;
+    width: 100%;
+    padding: 4px 12px;
+    box-sizing: border-box;
+
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(-45deg, darkslategray, darkslateblue);
+    color: whitesmoke;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.account-action-button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.account-action-button .icon {
+    width: 16px;
+    height: 16px;
+}
+
+.account-actions button {
+    grid-column: 2;
+}
+
+.account-status {
+    color: dimgray;
+}
+
+.account-info {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.account-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    min-width: 0;
+    padding: 16px;
+    border-radius: 16px;
+    background: whitesmoke;
+}
+
+.account-info-item span {
+    color: gray;
+    font-size: 12px;
+}
+
+.account-info-item strong {
+    overflow: hidden;
+    color: darkslategray;
+    font-size: 14px;
+    text-overflow: ellipsis;
+}
+
+.avatar-input {
+    display: none;
+}
+
+
+@media (max-width: 720px) {
+    .account-summary {
+        align-items: flex-start;
+    }
+
+    .account-form-content {
+        grid-template-columns: 1fr;
+    }
+
+    .account-profile-row {
+        flex-direction: column;
+    }
+
+    .account-profile-row .avatar-button {
+        min-width: 0;
+    }
+
+    .account-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .account-actions button {
+        grid-column: 1;
+    }
+
+    .account-info {
+        grid-template-columns: 1fr;
+    }
+}
