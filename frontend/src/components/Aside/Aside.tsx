@@ -1,6 +1,6 @@
 import './Aside.css'
 
-import { Link } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 import homeIcon from '../../assets/icons/home.svg'
 import chatIcon from '../../assets/icons/chat.svg'
@@ -9,32 +9,40 @@ import settingsIcon from '../../assets/icons/settings.svg'
 import aboutIcon from '../../assets/icons/info.svg'
 
 function Aside() {
+  const { pathname } = useLocation()
+
   return (
     <aside className="aside">
         <div className="logo">
             <h1>mind.local&reg;</h1>
         </div>
 
-        <Link className="link" to="/">
+        <NavLink
+            className={({ isActive }) =>
+              isActive || pathname === '/home' ? 'link active' : 'link'
+            }
+            to="/"
+            end
+        >
             <img className="icon" src={homeIcon} alt="home icon" />
             HOME
-        </Link>
-        <Link className='link' to="/chat">
+        </NavLink>
+        <NavLink className="link" to="/chat" end>
             <img className="icon" src={chatIcon} alt="chat icon" />
             CHAT
-        </Link>
-        <Link className="link" to="/library">
+        </NavLink>
+        <NavLink className="link" to="/library" end>
             <img className="icon" src={libraryIcon} alt="library icon" />
             LIBRARY
-        </Link>
-        <Link className="link" to="/settings">
+        </NavLink>
+        <NavLink className="link" to="/settings" end>
             <img className="icon" src={settingsIcon} alt="settings icon" />
             SETTINGS
-        </Link>
-        <Link className="link" to="/about">
+        </NavLink>
+        <NavLink className="link" to="/about" end>
             <img className="icon" src={aboutIcon} alt="about icon" />
             ABOUT
-        </Link>
+        </NavLink>
     </aside>
   )
 }
