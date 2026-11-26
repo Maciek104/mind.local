@@ -24,6 +24,11 @@ interface DocumentRow {
   updated_at: string;
 }
 
+interface AdminDocumentRow extends DocumentRow {
+  user_email: string;
+  user_display_name: string | null;
+}
+
 @Injectable()
 export class DocumentsService {
   constructor(private readonly database: DatabaseService) {}
@@ -92,6 +97,33 @@ export class DocumentsService {
     return rows.map((row) => this.toResponse(row));
   }
 
+  findAllForAdmin() {
+    const rows = this.database.connection
+      .prepare(`
+        SELECT
+          documents.*,
+          users.email AS user_email,
+          users.display_name AS user_display_name
+        FROM documents
+        JOIN users ON users.id = documents.user_id
+        ORDER BY documents.created_at DESC
+      `)
+      .all() as AdminDocumentRow[];
+
+    return rows.map((row) => ({
+      id: row.id,
+      originalName: row.original_name,
+      mimeType: row.mime_type,
+      fileSize: row.file_size,
+      status: row.status,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+      userId: row.user_id,
+      userEmail: row.user_email,
+      userDisplayName: row.user_display_name,
+    }));
+  }
+
   findOne(userId: string, id: string) {
     return this.toResponse(this.findRow(userId, id));
   }
@@ -137,6 +169,24 @@ export class DocumentsService {
   findForDownload(userId: string, id: string) {
     const row = this.findRow(userId, id);
 
+    if (!fs.existsSync(row.storage_path)) {
+      throw new NotFoundException('The file is no longer available on disk.');
+    }
+
+    return {
+      storagePath: row.storage_path,
+      originalName: row.original_name,
+    };
+  }
+
+  findForAdminDownload(id: string) {
+    const row = this.database.connection
+      .prepare('SELECT * FROM documents WHERE id = ? LIMIT 1')
+      .get(id) as DocumentRow | undefined;
+
+    if (!row) {
+      throw new NotFoundException('Document not found.');
+    }
     if (!fs.existsSync(row.storage_path)) {
       throw new NotFoundException('The file is no longer available on disk.');
     }

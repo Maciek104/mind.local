@@ -11,10 +11,12 @@ import {
   Res,
   Req,
   Body,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import type { Response, Request } from 'express';
 import 'multer';
+import { AdminGuard } from '../auth/admin.guard.js';
 import { DocumentsService } from './documents.service.js';
 import { UpdateDocumentDto } from './dto/update-document.dto.js';
 
@@ -50,6 +52,22 @@ export class DocumentsController {
   @Get()
   findAll(@Req() request: AuthenticatedRequest) {
     return this.documentsService.findAll(request.user.id);
+  }
+
+  @Get('admin')
+  @UseGuards(AdminGuard)
+  findAllForAdmin() {
+    return this.documentsService.findAllForAdmin();
+  }
+
+  @Get('admin/:id/download')
+  @UseGuards(AdminGuard)
+  downloadForAdmin(
+    @Param('id') id: string,
+    @Res() response: Response,
+  ) {
+    const document = this.documentsService.findForAdminDownload(id);
+    response.download(document.storagePath, document.originalName);
   }
 
   @Get(':id/download')

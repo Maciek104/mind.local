@@ -1,0 +1,30 @@
+.alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 15px;
+  padding: 10px 13px;
+  border: 1px solid;
+  border-radius: 7px;
+  font-size: 11px;
+}
+
+.alert button {
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font-size: 18px;
+}
+
+.error-alert {
+  border-color: #d8b8b8;
+  color: darkred;
+  background: #f7eeee;
+}
+
+.success-alert {
+  border-color: #b6c8ba;
+  color: darkslategray;
+  background: #eef4ef;
+}

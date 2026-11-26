@@ -54,6 +54,8 @@
 │   │   ├── messages/      # Message API scaffold
 │   │   └── database/      # SQLite initialization and migrations
 │   └── data/              # Runtime database, documents, and avatars
+├── admin/
+│   └── src/               # Administrator panel (React + TypeScript + Vite)
 ├── database/
 │   └── schema.sql         # SQLite schema
 └── frontend/
@@ -98,6 +100,18 @@ Open `http://localhost:5173`. The frontend currently uses the API at `http://loc
 
 When no administrator account exists, the application displays the setup form. Create the initial administrator there, then sign in with the email and password you chose.
 
+### 4. Start the administrator panel
+
+In another terminal:
+
+```powershell
+cd admin
+npm install
+npm run dev
+```
+
+Open `http://localhost:5174` and sign in with an administrator account. The panel supports user creation, editing, activation/deactivation and deletion, as well as browsing and downloading user-uploaded files.
+
 ## Development commands
 
 ### Backend
@@ -123,9 +137,18 @@ npm run lint
 npm run preview
 ```
 
+### Administrator panel
+
+```powershell
+cd admin
+npm run dev
+npm run build
+npm run lint
+```
+
 ## API overview
 
-The global authentication guard protects API routes by default. Setup status, setup initialization, and login are public. The frontend authenticates with the HTTP-only `local_mind_session` cookie.
+The global authentication guard protects API routes by default. Setup status, setup initialization, and login are public. The frontend authenticates with the HTTP-only `local_mind_session` cookie. User administration routes and the all-users document listing/download routes require an authenticated `ADMIN` account.
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -134,13 +157,15 @@ The global authentication guard protects API routes by default. Setup status, se
 | `POST` | `/auth/login` | Sign in and create a session (public) |
 | `GET` | `/auth/me` | Return the current authenticated user |
 | `POST` | `/auth/logout` | End the current session |
-| `GET`, `POST` | `/users` | List users or create a user |
-| `GET`, `PATCH`, `DELETE` | `/users/:id` | Read, update, or delete a user |
+| `GET`, `POST` | `/users` | List users or create a user (administrator only) |
+| `GET`, `PATCH`, `DELETE` | `/users/:id` | Read, update, activate/deactivate, or delete a user (administrator only) |
 | `GET`, `PATCH` | `/users/me` | Read or update the current user's profile |
 | `POST`, `GET`, `DELETE` | `/users/me/avatar` | Upload (up to 5 MB), retrieve, or remove the current user's avatar |
 | `GET`, `POST` | `/documents` | List documents or upload one using multipart field `file` (up to 25 MB) |
 | `GET`, `PATCH`, `DELETE` | `/documents/:id` | Read, rename, or delete a document |
 | `GET` | `/documents/:id/download` | Download a document |
+| `GET` | `/documents/admin` | List document metadata across users (administrator only) |
+| `GET` | `/documents/admin/:id/download` | Download any user's document (administrator only) |
 | `CRUD` | `/conversations`, `/messages` | Scaffold routes; persistence and functional operations are not implemented |
 
 Document operations are scoped to the authenticated user. Uploaded files and avatars are saved under `backend/data/`; their metadata is kept in SQLite.

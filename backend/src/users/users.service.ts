@@ -118,7 +118,15 @@ export class UsersService {
   }
 
   async update(id: string, dto: UpdateUserDto) {
-    this.findOne(id);
+    const user = this.findOne(id);
+
+    if (
+      user.role === 'ADMIN' &&
+      user.is_active === 1 &&
+      dto.is_active === false
+    ) {
+      this.assertNotLastActiveAdmin(id);
+    }
 
     if (dto.email) {
       const email = dto.email.trim().toLowerCase();
@@ -153,6 +161,11 @@ export class UsersService {
       values.push(await bcrypt.hash(dto.password, 12));
     }
 
+    if (dto.is_active !== undefined) {
+      fields.push('is_active = ?');
+      values.push(dto.is_active ? 1 : 0);
+    }
+
     if (fields.length === 0) {
       return this.findOne(id);
     }
@@ -166,11 +179,30 @@ export class UsersService {
   }
 
   remove(id: string) {
-    this.findOne(id);
+    const user = this.findOne(id);
+    if (user.role === 'ADMIN' && user.is_active === 1) {
+      this.assertNotLastActiveAdmin(id);
+    }
     this.database.connection
       .prepare('DELETE FROM users WHERE id = ?')
       .run(id);
     return { success: true };
+  }
+
+  private assertNotLastActiveAdmin(id: string): void {
+    const activeAdmins = this.database.connection
+      .prepare(`
+        SELECT COUNT(*) AS count
+        FROM users
+        WHERE role = 'ADMIN' AND is_active = 1 AND id != ?
+      `)
+      .get(id) as { count: number };
+
+    if (activeAdmins.count === 0) {
+      throw new BadRequestException(
+        'Nie można dezaktywować ani usunąć ostatniego aktywnego administratora',
+      );
+    }
   }
 
   updateAvatar(userId: string, avatar: Express.Multer.File) {

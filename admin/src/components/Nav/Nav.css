@@ -1,0 +1,56 @@
+.topbar {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  display: flex;
+  height: 64px;
+  flex: 0 0 64px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: lightgray;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: gray;
+  font-size: 16px;
+}
+
+.breadcrumb strong {
+  color: darkslategray;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.breadcrumb-divider {
+  color: gray;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: darkslategray;
+  font-size: 12px;
+}
+
+.secure-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #467f57;
+  box-shadow: 0 0 0 3px rgba(70, 127, 87, .15);
+}
+
+@media (max-width: 680px) {
+  .topbar {
+    padding: 0 15px;
+  }
+
+  .topbar-right {
+    font-size: 0;
+  }
+}
