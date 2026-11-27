@@ -6,9 +6,10 @@ interface NavProps {
 }
 
 const sectionTitles: Record<Section, string> = {
-  overview: 'Przegląd',
-  users: 'Użytkownicy',
-  files: 'Pliki',
+  overview: 'Overview',
+  users: 'Users',
+  files: 'Files',
+  plans: 'Plans',
 };
 
 function Nav({ section }: NavProps) {
@@ -21,7 +22,7 @@ function Nav({ section }: NavProps) {
       </div>
       <div className="topbar-right">
         <span className="secure-dot" />
-        Panel administratora
+        Admin panel
       </div>
     </header>
   );

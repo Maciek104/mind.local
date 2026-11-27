@@ -1,0 +1,143 @@
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 16px;
+}
+
+.plan-metadata-note {
+  margin: 8px 0 0;
+  color: dimgray;
+  font-size: 10px;
+}
+
+.plan-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 18px;
+}
+
+.plan-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.plan-code {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 16px;
+  color: whitesmoke;
+  background: linear-gradient(-45deg, darkslategray, darkslateblue);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+
+.plan-card-heading p {
+  margin: 9px 0 0;
+  color: dimgray;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.plan-storage-summary {
+  color: darkslategray;
+  font-size: 10px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.plan-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.plan-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: darkslategray;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.plan-fields input {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid lightgray;
+  border-radius: 16px;
+  outline: 0;
+  color: darkslategray;
+  background: #fff;
+  font-size: 11px;
+}
+
+.plan-fields input:focus {
+  border-color: darkslateblue;
+}
+
+.plan-models {
+  margin: 0;
+  padding: 12px;
+  border: 1px solid lightgray;
+  border-radius: 12px;
+}
+
+.plan-models legend {
+  padding: 0 5px;
+  color: darkslategray;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.model-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.model-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border: 1px solid lightgray;
+  border-radius: 16px;
+  color: darkslategray;
+  background: #fff;
+  font-size: 10px;
+}
+
+.model-option input {
+  accent-color: darkslategray;
+}
+
+.plan-error {
+  margin: 0;
+  color: darkred;
+  font-size: 10px;
+}
+
+.plan-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
+@media (max-width: 500px) {
+  .plan-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .plan-card-heading {
+    flex-direction: column;
+  }
+
+  .plan-storage-summary {
+    text-align: left;
+  }
+}

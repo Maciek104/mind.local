@@ -22,7 +22,7 @@ function Login({ initialError, onLogin }: LoginProps) {
     try {
       const user = await login(email, password);
       if (user.role !== 'ADMIN') {
-        setError('To konto nie ma uprawnień administratora.');
+        setError('This account does not have administrator privileges.');
         return;
       }
       await onLogin(user);
@@ -41,11 +41,11 @@ function Login({ initialError, onLogin }: LoginProps) {
           <span>ADMIN PANEL</span>
         </div>
         <div className="login-intro">
-          <h1>Panel administracyjny</h1>
-          <p className="muted">Zaloguj się na konto administratora.</p>
+          <h1>Admin panel</h1>
+          <p className="muted">Sign in with an administrator account.</p>
         </div>
         <label>
-          Adres e-mail
+          Email address
           <input
             type="email"
             autoComplete="username"
@@ -55,7 +55,7 @@ function Login({ initialError, onLogin }: LoginProps) {
           />
         </label>
         <label>
-          Hasło
+          Password
           <input
             type="password"
             autoComplete="current-password"
@@ -66,7 +66,7 @@ function Login({ initialError, onLogin }: LoginProps) {
         </label>
         {error && <p className="form-error" role="alert">{error}</p>}
         <button className="primary-button login-submit" disabled={submitting}>
-          {submitting ? 'Logowanie…' : 'Zaloguj się'}
+          {submitting ? 'Signing in...' : 'Sign in'}
         </button>
       </form>
     </main>

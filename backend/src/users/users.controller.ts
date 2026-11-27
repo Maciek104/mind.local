@@ -53,12 +53,12 @@ export class UsersController {
   ) {
     if (updateUserDto.plan !== undefined) {
       throw new BadRequestException(
-        'Nie możesz zmieniać planu konta przez profil',
+        'You cannot change your plan from your profile',
       );
     }
     if (updateUserDto.is_active !== undefined) {
       throw new BadRequestException(
-        'Nie możesz zmieniać statusu własnego konta przez profil',
+        'You cannot change your account status from your profile',
       );
     }
     return this.usersService.update(request.user.id, updateUserDto);
@@ -97,6 +97,42 @@ export class UsersController {
     return this.usersService.removeAvatar(request.user.id);
   }
 
+  @Post(':id/avatar')
+  @UseGuards(AdminGuard)
+  @UseInterceptors(
+    FileInterceptor('avatar', {
+      limits: { fileSize: 5 * 1024 * 1024 },
+    }),
+  )
+  uploadUserAvatar(
+    @Param('id') id: string,
+    @UploadedFile() avatar: Express.Multer.File | undefined,
+  ) {
+    if (!avatar) {
+      throw new BadRequestException('No avatar was uploaded');
+    }
+    return this.usersService.updateAvatar(id, avatar);
+  }
+
+  @Get(':id/avatar')
+  @UseGuards(AdminGuard)
+  getUserAvatar(
+    @Param('id') id: string,
+    @Res() response: Response,
+  ) {
+    const avatarPath = this.usersService.findAvatar(id);
+    if (!avatarPath) {
+      throw new BadRequestException('The user has no avatar');
+    }
+    response.sendFile(avatarPath);
+  }
+
+  @Delete(':id/avatar')
+  @UseGuards(AdminGuard)
+  removeUserAvatar(@Param('id') id: string) {
+    return this.usersService.removeAvatar(id);
+  }
+
   @Get(':id')
   @UseGuards(AdminGuard)
   findOne(@Param('id') id: string) {
@@ -112,7 +148,7 @@ export class UsersController {
   ) {
     if (id === request.user.id && updateUserDto.is_active === false) {
       throw new BadRequestException(
-        'Nie możesz dezaktywować własnego konta administratora',
+        'You cannot deactivate your own administrator account',
       );
     }
     return this.usersService.update(id, updateUserDto);
@@ -126,7 +162,7 @@ export class UsersController {
   ) {
     if (id === request.user.id) {
       throw new BadRequestException(
-        'Nie możesz usunąć własnego konta administratora',
+        'You cannot delete your own administrator account',
       );
     }
     return this.usersService.remove(id);

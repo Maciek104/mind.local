@@ -67,10 +67,10 @@ function Register({ onRegistered }: RegisterProps) {
                 );
             }
 
-            // Ponowne sprawdzenie statusu konfiguracji
+            // Recheck the application setup status.
             await onRegistered();
 
-            // Przejście do logowania
+            // Continue to the sign-in page.
             navigate('/login', { replace: true });
 
         } catch (err) {

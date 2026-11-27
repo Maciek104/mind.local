@@ -388,7 +388,7 @@ function Tetris() {
               className="tetris-firework-text"
               style={{ textShadow: firework.textShadow }}
             >
-              WSZYSTKIE RYŚKI TO FAJNE CHŁOPAKI
+              ALL LITTLE LYNXES ARE GOOD BOYS
             </span>
           </div>
         </div>

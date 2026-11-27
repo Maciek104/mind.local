@@ -1,1 +1,1 @@
-export type Section = 'overview' | 'users' | 'files';
+export type Section = 'overview' | 'users' | 'files' | 'plans';

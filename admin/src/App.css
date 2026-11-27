@@ -64,6 +64,14 @@
   font-weight: 600;
 }
 
+.primary-button .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.refresh-button .material-symbols-outlined {
+  font-size: 15px;
+}
+
 .primary-button {
   border: 0;
   color: whitesmoke;

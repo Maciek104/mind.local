@@ -55,7 +55,7 @@ export class AuthService {
 
     if (!user || user.is_active !== 1) {
       throw new UnauthorizedException(
-        'Nieprawidłowy e-mail lub hasło',
+        'Invalid email or password',
       );
     }
 
@@ -66,7 +66,7 @@ export class AuthService {
 
     if (!passwordMatches) {
       throw new UnauthorizedException(
-        'Nieprawidłowy e-mail lub hasło',
+        'Invalid email or password',
       );
     }
 

@@ -33,7 +33,7 @@ function Login({ onLogin }: LoginProps) {
             setError(
                 err instanceof Error
                     ? err.message
-                    : 'Wystąpił nieoczekiwany błąd.',
+                    : 'An unexpected error occurred.',
             );
         } finally {
             setLoading(false);
@@ -78,7 +78,7 @@ function Login({ onLogin }: LoginProps) {
                     {error && <p role="alert">{error}</p>}
 
                     <button className="button" type="submit" disabled={loading}>
-                        {loading ? 'Logowanie...' : 'Zaloguj się'}
+                        {loading ? 'Signing in...' : 'Sign in'}
                     </button>
                 </form>
             </div>

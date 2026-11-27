@@ -36,6 +36,11 @@ Plan records expose `storage_limit_bytes` (null until configured) and
 `allowed_models` (an array of model identifiers). These values are metadata;
 storage and model access enforcement is not part of this API change.
 
+Administrators can upload, view, and remove another user's avatar through
+`POST /users/:id/avatar`, `GET /users/:id/avatar`, and
+`DELETE /users/:id/avatar`. Uploads use the `avatar` multipart field and are
+limited to 5 MB.
+
 ## Project setup
 
 ```bash

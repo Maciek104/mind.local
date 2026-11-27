@@ -35,7 +35,6 @@ function Toggle({ checked, label, onChange }: ToggleProps) {
 
 function Settings() {
     const [theme, setTheme] = useState("System")
-    const [language, setLanguage] = useState("English")
     const [chatModel, setChatModel] = useState("local-default")
     const [showSuggestions, setShowSuggestions] = useState(true)
     const [enterToSend, setEnterToSend] = useState(false)
@@ -79,11 +78,10 @@ function Settings() {
                             </div>
                             <select
                                 aria-label="Language"
-                                value={language}
-                                onChange={(event) => setLanguage(event.target.value)}
+                                value="English"
+                                disabled
                             >
                                 <option>English</option>
-                                <option>Polski</option>
                             </select>
                         </div>
                     </div>

@@ -26,6 +26,10 @@
   font-size: 14px;
 }
 
+.stat-icon .material-symbols-outlined {
+  font-size: 17px;
+}
+
 .stat-label,
 .stat-caption {
   color: dimgray;
@@ -95,6 +99,12 @@
   margin-left: 4px;
 }
 
+.text-button .material-symbols-outlined {
+  margin-left: 2px;
+  font-size: 12px;
+  vertical-align: middle;
+}
+
 .recent-list {
   padding: 0 16px;
   border-radius: 0 0 16px 16px;
@@ -123,6 +133,10 @@
   color: darkslategray;
   background: #e8e7ed;
   font-size: 15px;
+}
+
+.file-type-icon .material-symbols-outlined {
+  font-size: 19px;
 }
 
 .recent-file-name {
@@ -170,6 +184,10 @@
   background: #e5e3eb;
 }
 
+.file-download-button .material-symbols-outlined {
+  font-size: 17px;
+}
+
 .quick-actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -206,6 +224,10 @@
   font-size: 19px;
 }
 
+.quick-action-icon .material-symbols-outlined {
+  font-size: 18px;
+}
+
 .quick-action > span:nth-child(2) {
   display: flex;
   flex: 1;
@@ -227,6 +249,10 @@
   color: darkslategray;
   font-size: 14px;
   font-weight: 400;
+}
+
+.quick-action b .material-symbols-outlined {
+  font-size: 13px;
 }
 
 .empty-state {

@@ -17,6 +17,10 @@
   font-size: 18px;
 }
 
+.alert button .material-symbols-outlined {
+  font-size: 16px;
+}
+
 .error-alert {
   border-color: #d8b8b8;
   color: darkred;

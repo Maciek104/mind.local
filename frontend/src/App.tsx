@@ -54,7 +54,7 @@ function App() {
       setError(
         err instanceof Error
           ? err.message
-          : 'Nie udało się połączyć z serwerem.',
+          : 'Could not connect to the server.',
       );
 
       setStatus('error');
@@ -69,12 +69,12 @@ function App() {
     <Router>
       <AdminAccessContext.Provider value={isAdmin}>
       {status === 'loading' && (
-        <div>Ładowanie local.mind...</div>
+        <div>Loading local.mind...</div>
       )}
 
       {status === 'error' && (
         <div>
-          <h2>Nie udało się uruchomić local.mind</h2>
+          <h2>Could not start local.mind</h2>
           <p>{error}</p>
           <button
             onClick={() => {
@@ -83,7 +83,7 @@ function App() {
               void checkSetup();
             }}
           >
-            Spróbuj ponownie
+            Try again
           </button>
         </div>
       )}

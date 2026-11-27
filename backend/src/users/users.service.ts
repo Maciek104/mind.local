@@ -40,7 +40,7 @@ export class UsersService {
       .get(email);
 
     if (existing) {
-      throw new ConflictException('Użytkownik o tym e-mailu już istnieje');
+      throw new ConflictException('A user with this email already exists');
     }
 
     const passwordHash = await bcrypt.hash(dto.password, 12);
@@ -143,7 +143,7 @@ export class UsersService {
         .get(email, id);
 
       if (existing) {
-        throw new ConflictException('Użytkownik o tym e-mailu już istnieje');
+        throw new ConflictException('A user with this email already exists');
       }
       dto.email = email;
     }
@@ -208,7 +208,7 @@ export class UsersService {
 
     if (activeAdmins.count === 0) {
       throw new BadRequestException(
-        'Nie można dezaktywować ani usunąć ostatniego aktywnego administratora',
+        'The last active administrator cannot be deactivated or deleted',
       );
     }
   }

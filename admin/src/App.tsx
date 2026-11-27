@@ -6,19 +6,26 @@ import UserDialog from './components/UserDialog/UserDialog';
 import Files from './pages/Files/Files';
 import Login from './pages/Login/Login';
 import Overview from './pages/Overview/Overview';
+import Plans from './pages/Plans/Plans';
 import Users from './pages/Users/Users';
 import {
   createUser,
+  deleteUserAvatar,
   deleteUser,
   downloadDocument,
   getCurrentAdmin,
+  listPlans,
   listDocuments,
   listUsers,
   logout,
   setUserActive,
+  updatePlan,
   updateUser,
+  uploadUserAvatar,
+  type AdminPlan,
   type AdminDocument,
   type AdminUser,
+  type PlanInput,
   type UserInput,
 } from './services/admin';
 import type { Section } from './types';
@@ -32,6 +39,7 @@ function App() {
   const [section, setSection] = useState<Section>('overview');
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [documents, setDocuments] = useState<AdminDocument[]>([]);
+  const [plans, setPlans] = useState<AdminPlan[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -40,12 +48,14 @@ function App() {
 
   async function loadData() {
     try {
-      const [nextUsers, nextDocuments] = await Promise.all([
+      const [nextUsers, nextDocuments, nextPlans] = await Promise.all([
         listUsers(),
         listDocuments(),
+        listPlans(),
       ]);
       setUsers(nextUsers);
       setDocuments(nextDocuments);
+      setPlans(nextPlans);
     } catch (loadError) {
       setError(getErrorMessage(loadError));
     } finally {
@@ -66,7 +76,7 @@ function App() {
           setAdmin(user);
           void loadData();
         } else if (user) {
-          setAuthError('To konto nie ma uprawnień administratora.');
+          setAuthError('This account does not have administrator privileges.');
           setLoadingData(false);
         } else {
           setLoadingData(false);
@@ -86,6 +96,7 @@ function App() {
       setAuthError('');
       setUsers([]);
       setDocuments([]);
+      setPlans([]);
     } catch (logoutError) {
       setError(getErrorMessage(logoutError));
     }
@@ -94,13 +105,13 @@ function App() {
   async function saveUser(user: AdminUser | null, input: UserInput) {
     if (user) {
       await updateUser(user.id, input);
-      setNotice('Dane użytkownika zostały zaktualizowane.');
+      setNotice('User details have been updated.');
     } else {
       if (!input.password) {
-        throw new Error('Hasło początkowe jest wymagane.');
+        throw new Error('An initial password is required.');
       }
       await createUser({ ...input, password: input.password });
-      setNotice('Konto użytkownika zostało utworzone.');
+      setNotice('The user account has been created.');
     }
     setDialogUser(undefined);
     await refreshData();
@@ -112,8 +123,8 @@ function App() {
     try {
       await setUserActive(user.id, user.is_active !== 1);
       setNotice(user.is_active === 1
-        ? 'Konto zostało dezaktywowane.'
-        : 'Konto zostało aktywowane.');
+        ? 'The account has been deactivated.'
+        : 'The account has been activated.');
       await refreshData();
     } catch (toggleError) {
       setError(getErrorMessage(toggleError));
@@ -123,7 +134,7 @@ function App() {
   }
 
   async function removeUser(user: AdminUser) {
-    if (!window.confirm(`Czy na pewno usunąć konto ${user.email}? Tej operacji nie można cofnąć.`)) {
+    if (!window.confirm(`Are you sure you want to delete ${user.email}? This action cannot be undone.`)) {
       return;
     }
 
@@ -131,7 +142,7 @@ function App() {
     setError('');
     try {
       await deleteUser(user.id);
-      setNotice('Konto użytkownika zostało usunięte.');
+      setNotice('The user account has been deleted.');
       await refreshData();
     } catch (deleteError) {
       setError(getErrorMessage(deleteError));
@@ -152,13 +163,39 @@ function App() {
     }
   }
 
+  async function savePlan(plan: AdminPlan, input: PlanInput) {
+    await updatePlan(plan.code, input);
+    setNotice(`${plan.name} plan has been updated.`);
+    await refreshData();
+  }
+
+  async function handleAvatarUpload(userId: string, file: File): Promise<AdminUser> {
+    const updatedUser = await uploadUserAvatar(userId, file);
+    setUsers((currentUsers) => currentUsers.map((user) =>
+      user.id === userId ? updatedUser : user,
+    ));
+    setAdmin((currentAdmin) => currentAdmin?.id === userId ? updatedUser : currentAdmin);
+    setDialogUser((currentUser) => currentUser?.id === userId ? updatedUser : currentUser);
+    return updatedUser;
+  }
+
+  async function handleAvatarDelete(userId: string): Promise<AdminUser> {
+    const updatedUser = await deleteUserAvatar(userId);
+    setUsers((currentUsers) => currentUsers.map((user) =>
+      user.id === userId ? updatedUser : user,
+    ));
+    setAdmin((currentAdmin) => currentAdmin?.id === userId ? updatedUser : currentAdmin);
+    setDialogUser((currentUser) => currentUser?.id === userId ? updatedUser : currentUser);
+    return updatedUser;
+  }
+
   function openCreateUser() {
     setSection('users');
     setDialogUser(null);
   }
 
   if (checkingSession) {
-    return <main className="session-loading">Ładowanie panelu…</main>;
+    return <main className="session-loading">Loading admin panel...</main>;
   }
 
   if (!admin) {
@@ -225,6 +262,13 @@ function App() {
               onDownload={(document) => void handleDownload(document)}
             />
           )}
+          {section === 'plans' && (
+            <Plans
+              plans={plans}
+              loading={loadingData}
+              onSave={(plan, input) => savePlan(plan, input)}
+            />
+          )}
         </div>
       </main>
       {dialogUser !== undefined && (
@@ -233,6 +277,8 @@ function App() {
           user={dialogUser}
           onClose={() => setDialogUser(undefined)}
           onSave={(input) => saveUser(dialogUser, input)}
+          onAvatarUpload={handleAvatarUpload}
+          onAvatarDelete={handleAvatarDelete}
         />
       )}
     </div>

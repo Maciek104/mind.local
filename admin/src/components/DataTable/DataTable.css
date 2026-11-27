@@ -59,6 +59,10 @@
   border-color: darkslateblue;
 }
 
+.search-box .material-symbols-outlined {
+  font-size: 14px;
+}
+
 .search-box input {
   width: 100%;
   min-width: 0;
@@ -126,6 +130,13 @@
   color: darkslategray;
   background: lightgray;
   font-size: 11px;
+  overflow: hidden;
+}
+
+.table-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .table-user > span:nth-child(2),
@@ -236,6 +247,10 @@
   background: #e5e3eb;
 }
 
+.row-action .material-symbols-outlined {
+  font-size: 18px;
+}
+
 .row-action:disabled {
   opacity: .45;
 }
@@ -262,6 +277,10 @@
   border-radius: 8px;
   color: darkslategray;
   background: #e8e7ed;
+}
+
+.file-type-icon .material-symbols-outlined {
+  font-size: 18px;
 }
 
 .owner-cell {
@@ -292,6 +311,10 @@
 
 .download-action span {
   font-size: 13px;
+}
+
+.download-action .material-symbols-outlined {
+  font-size: 12px;
 }
 
 .download-action:disabled {

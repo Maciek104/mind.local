@@ -100,7 +100,7 @@ export class AuthController {
 
     return {
       success: true,
-      message: 'Wylogowano pomyślnie',
+      message: 'Signed out successfully',
     };
   }
 }

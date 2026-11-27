@@ -33,7 +33,7 @@ export class SetupService {
     const email = dto.email.trim().toLowerCase();
 
     if (dto.password !== dto.confirmPassword) {
-      throw new BadRequestException('Hasła nie są identyczne');
+      throw new BadRequestException('Passwords do not match');
     }
 
     const passwordHash = await bcrypt.hash(dto.password, 12);
@@ -49,7 +49,7 @@ export class SetupService {
 
       if (existingAdmin) {
         throw new ConflictException(
-          'Konfiguracja aplikacji została już zakończona',
+          'Application setup has already been completed',
         );
       }
 
@@ -61,7 +61,7 @@ export class SetupService {
 
       if (existingUser) {
         throw new ConflictException(
-          'Użytkownik z tym adresem e-mail już istnieje',
+          'A user with this email already exists',
         );
       }
 
@@ -84,7 +84,7 @@ export class SetupService {
 
     return {
       success: true,
-      message: 'Konto administratora zostało utworzone',
+      message: 'The administrator account has been created',
     };
   }
 }

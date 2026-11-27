@@ -21,7 +21,7 @@ export class AdminGuard implements CanActivate {
 
     if (request.user?.role !== 'ADMIN') {
       throw new ForbiddenException(
-        'Wymagane są uprawnienia administratora',
+        'Administrator privileges are required',
       );
     }
 

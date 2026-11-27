@@ -19,7 +19,7 @@ import { DatabaseModule } from '../database/database.module.js';
 
         if (!jwtSecret) {
           throw new Error(
-            'Brak JWT_SECRET. Nie udało się załadować konfiguracji.',
+            'JWT_SECRET is missing. Could not load the configuration.',
           );
         }
 

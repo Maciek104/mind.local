@@ -5,11 +5,27 @@ export interface AdminUser {
   email: string;
   display_name: string | null;
   bio: string | null;
+  profile_image_path: string | null;
   plan: string;
   role: 'USER' | 'ADMIN';
   is_active: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface AdminPlan {
+  code: string;
+  name: string;
+  storage_limit_bytes: number | null;
+  allowed_models: string[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PlanInput {
+  name: string;
+  storage_limit_bytes: number | null;
+  allowed_models: string[];
 }
 
 export interface AdminDocument {
@@ -31,11 +47,15 @@ export interface UserInput {
   password?: string;
 }
 
+export function getUserAvatarUrl(userId: string, version: string): string {
+  return `${API_URL}/users/${encodeURIComponent(userId)}/avatar?v=${encodeURIComponent(version)}`;
+}
+
 async function readError(response: Response): Promise<string> {
   const data = await response.json() as { message?: string | string[] };
   return Array.isArray(data.message)
     ? data.message.join(', ')
-    : data.message || 'Wystąpił błąd podczas komunikacji z serwerem.';
+    : data.message || 'A server communication error occurred.';
 }
 
 async function requestJson<T>(
@@ -90,6 +110,17 @@ export function listUsers(): Promise<AdminUser[]> {
   return requestJson('/users');
 }
 
+export function listPlans(): Promise<AdminPlan[]> {
+  return requestJson('/plan');
+}
+
+export function updatePlan(code: string, input: PlanInput): Promise<AdminPlan> {
+  return requestJson(`/plan/${encodeURIComponent(code)}`, {
+    method: 'PATCH',
+    body: JSON.stringify(input),
+  });
+}
+
 export function createUser(input: UserInput & { password: string }): Promise<AdminUser> {
   return requestJson('/users', {
     method: 'POST',
@@ -101,6 +132,26 @@ export function updateUser(id: string, input: UserInput): Promise<AdminUser> {
   return requestJson(`/users/${encodeURIComponent(id)}`, {
     method: 'PATCH',
     body: JSON.stringify(input),
+  });
+}
+
+export async function uploadUserAvatar(id: string, file: File): Promise<AdminUser> {
+  const formData = new FormData();
+  formData.append('avatar', file);
+  const response = await fetch(`${API_URL}/users/${encodeURIComponent(id)}/avatar`, {
+    method: 'POST',
+    credentials: 'include',
+    body: formData,
+  });
+  if (!response.ok) {
+    throw new Error(await readError(response));
+  }
+  return response.json() as Promise<AdminUser>;
+}
+
+export function deleteUserAvatar(id: string): Promise<AdminUser> {
+  return requestJson(`/users/${encodeURIComponent(id)}/avatar`, {
+    method: 'DELETE',
   });
 }
 

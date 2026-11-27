@@ -20,7 +20,7 @@ export async function checkAuthentication(): Promise<AuthenticatedUser | null> {
   }
 
   if (!response.ok) {
-    throw new Error('Nie udało się sprawdzić sesji użytkownika.');
+    throw new Error('Could not check the user session.');
   }
 
   const data = await response.json();
@@ -46,7 +46,7 @@ export async function login(
     throw new Error(
       Array.isArray(data.message)
         ? data.message.join(', ')
-        : data.message || 'Nie udało się zalogować.',
+        : data.message || 'Could not sign in.',
     );
   }
 
@@ -71,7 +71,7 @@ export async function getCurrentUser(): Promise<AuthenticatedUser> {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || 'Nie udało się pobrać danych użytkownika.');
+    throw new Error(data.message || 'Could not load user details.');
   }
 
   return data.user as AuthenticatedUser;
@@ -98,7 +98,7 @@ export async function updateCurrentUser(
     throw new Error(
       Array.isArray(data.message)
         ? data.message.join(', ')
-        : data.message || 'Nie udało się zapisać profilu.',
+        : data.message || 'Could not save your profile.',
     );
   }
 
@@ -120,7 +120,7 @@ export async function uploadAvatar(file: File): Promise<AuthenticatedUser> {
     throw new Error(
       Array.isArray(data.message)
         ? data.message.join(', ')
-        : data.message || 'Nie udało się przesłać avatara.',
+        : data.message || 'Could not upload your avatar.',
     );
   }
 
@@ -135,7 +135,7 @@ export async function deleteAvatar(): Promise<AuthenticatedUser> {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || 'Nie udało się usunąć avatara.');
+    throw new Error(data.message || 'Could not remove your avatar.');
   }
 
   return data as AuthenticatedUser;

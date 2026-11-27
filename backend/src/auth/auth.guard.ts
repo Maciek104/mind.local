@@ -57,7 +57,7 @@ export class AuthGuard implements CanActivate {
 
     if (!token) {
       throw new UnauthorizedException(
-        'Musisz się zalogować',
+        'You must sign in',
       );
     }
 
@@ -90,7 +90,7 @@ export class AuthGuard implements CanActivate {
 
       if (!session) {
         throw new UnauthorizedException(
-          'Sesja wygasła lub została unieważniona',
+          'The session has expired or been revoked',
         );
       }
 
@@ -123,7 +123,7 @@ export class AuthGuard implements CanActivate {
 
       if (!user) {
         throw new UnauthorizedException(
-          'Konto użytkownika jest nieaktywne',
+          'The user account is inactive',
         );
       }
 
@@ -135,7 +135,7 @@ export class AuthGuard implements CanActivate {
       return true;
     } catch {
       throw new UnauthorizedException(
-        'Nieprawidłowa lub wygasła sesja',
+        'The session is invalid or has expired',
       );
     }
   }
