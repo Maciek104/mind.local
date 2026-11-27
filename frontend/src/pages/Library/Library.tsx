@@ -128,6 +128,7 @@ function Library() {
             ref={fileInput}
             type="file"
             multiple
+            accept=".txt,.md,.markdown,.csv,.json,.pdf,.docx"
             onChange={(event) => void handleFiles(event.target.files)}
           />
           <button
@@ -140,7 +141,9 @@ function Library() {
             {uploading ? 'Uploading...' : 'Add files'}
           </button>
           <span>
-            Maximum file size per file: 25 MB. You can also drag and drop files here.
+            Supported formats: TXT, Markdown, CSV, JSON, PDF, and DOCX. Maximum
+            file size per file: 25 MB. Scanned PDFs require OCR and are not
+            supported.
           </span>
         </section>
 

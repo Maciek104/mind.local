@@ -33,17 +33,31 @@ CREATE TABLE plans (
     code TEXT PRIMARY KEY NOT NULL
         CHECK (code IN ('FREE', 'PRO', 'ULTRA')),
     name TEXT NOT NULL,
-    storage_limit_bytes INTEGER
-        CHECK (storage_limit_bytes IS NULL OR storage_limit_bytes >= 0),
+    storage_limit_bytes INTEGER NOT NULL
+        CHECK (storage_limit_bytes >= 0),
     allowed_models TEXT NOT NULL DEFAULT '[]',
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT OR IGNORE INTO plans (code, name) VALUES
-    ('FREE', 'FREE'),
-    ('PRO', 'PRO'),
-    ('ULTRA', 'ULTRA');
+INSERT OR IGNORE INTO plans (code, name, storage_limit_bytes) VALUES
+    ('FREE', 'FREE', 1073741824),
+    ('PRO', 'PRO', 10737418240),
+    ('ULTRA', 'ULTRA', 107374182400);
+
+-- LLM MODELS
+
+CREATE TABLE models (
+    name TEXT PRIMARY KEY NOT NULL,
+    model TEXT NOT NULL,
+    modified_at TEXT,
+    size INTEGER NOT NULL DEFAULT 0
+        CHECK (size >= 0),
+    digest TEXT NOT NULL DEFAULT '',
+    details TEXT NOT NULL DEFAULT '{}',
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
 -- DOCUMENTS
 
@@ -179,6 +193,15 @@ BEGIN
     UPDATE plans
     SET updated_at = CURRENT_TIMESTAMP
     WHERE code = NEW.code;
+END;
+
+CREATE TRIGGER trg_models_updated_at
+AFTER UPDATE ON models
+FOR EACH ROW
+BEGIN
+    UPDATE models
+    SET updated_at = CURRENT_TIMESTAMP
+    WHERE name = NEW.name;
 END;
 
 CREATE TRIGGER trg_documents_updated_at

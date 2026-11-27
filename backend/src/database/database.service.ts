@@ -64,6 +64,7 @@ export class DatabaseService implements OnModuleDestroy {
     }
 
     this.ensurePlans();
+    this.ensureModels();
 
     console.log(`SQLite connected: ${databasePath}`);
   }
@@ -98,8 +99,8 @@ export class DatabaseService implements OnModuleDestroy {
         code TEXT PRIMARY KEY NOT NULL
           CHECK (code IN ('FREE', 'PRO', 'ULTRA')),
         name TEXT NOT NULL,
-        storage_limit_bytes INTEGER
-          CHECK (storage_limit_bytes IS NULL OR storage_limit_bytes >= 0),
+        storage_limit_bytes INTEGER NOT NULL
+          CHECK (storage_limit_bytes >= 0),
         allowed_models TEXT NOT NULL DEFAULT '[]',
         created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -115,15 +116,47 @@ export class DatabaseService implements OnModuleDestroy {
       END;
     `);
 
-    this.db
-      .prepare('INSERT OR IGNORE INTO plans (code, name) VALUES (?, ?)')
-      .run('FREE', 'FREE');
-    this.db
-      .prepare('INSERT OR IGNORE INTO plans (code, name) VALUES (?, ?)')
-      .run('PRO', 'PRO');
-    this.db
-      .prepare('INSERT OR IGNORE INTO plans (code, name) VALUES (?, ?)')
-      .run('ULTRA', 'ULTRA');
+    const insertPlan = this.db.prepare(`
+      INSERT OR IGNORE INTO plans (code, name, storage_limit_bytes)
+      VALUES (?, ?, ?)
+    `);
+    insertPlan.run('FREE', 'FREE', 1_073_741_824);
+    insertPlan.run('PRO', 'PRO', 10_737_418_240);
+    insertPlan.run('ULTRA', 'ULTRA', 107_374_182_400);
+
+    this.db.exec(`
+      UPDATE plans
+      SET storage_limit_bytes = CASE code
+        WHEN 'FREE' THEN 1073741824
+        WHEN 'PRO' THEN 10737418240
+        WHEN 'ULTRA' THEN 107374182400
+      END
+      WHERE storage_limit_bytes IS NULL;
+    `);
+  }
+
+  private ensureModels(): void {
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS models (
+        name TEXT PRIMARY KEY NOT NULL,
+        model TEXT NOT NULL,
+        modified_at TEXT,
+        size INTEGER NOT NULL DEFAULT 0 CHECK (size >= 0),
+        digest TEXT NOT NULL DEFAULT '',
+        details TEXT NOT NULL DEFAULT '{}',
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TRIGGER IF NOT EXISTS trg_models_updated_at
+      AFTER UPDATE ON models
+      FOR EACH ROW
+      BEGIN
+        UPDATE models
+        SET updated_at = CURRENT_TIMESTAMP
+        WHERE name = NEW.name;
+      END;
+    `);
   }
 
   get connection(): Database.Database {

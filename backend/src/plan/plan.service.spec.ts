@@ -13,13 +13,16 @@ describe('PlanService', () => {
       CREATE TABLE plans (
         code TEXT PRIMARY KEY CHECK (code IN ('FREE', 'PRO', 'ULTRA')),
         name TEXT NOT NULL,
-        storage_limit_bytes INTEGER,
+        storage_limit_bytes INTEGER NOT NULL,
         allowed_models TEXT NOT NULL DEFAULT '[]',
         created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
       );
-      INSERT INTO plans (code, name)
-      VALUES ('FREE', 'FREE'), ('PRO', 'PRO'), ('ULTRA', 'ULTRA');
+      INSERT INTO plans (code, name, storage_limit_bytes)
+      VALUES
+        ('FREE', 'FREE', 1073741824),
+        ('PRO', 'PRO', 10737418240),
+        ('ULTRA', 'ULTRA', 107374182400);
     `);
 
     const module: TestingModule = await Test.createTestingModule({
@@ -62,5 +65,11 @@ describe('PlanService', () => {
       'PRO',
       'ULTRA',
     ]);
+  });
+
+  it('uses the default storage limits for each built-in plan', () => {
+    expect(
+      service.findAll().map((plan) => plan.storage_limit_bytes),
+    ).toEqual([1073741824, 10737418240, 107374182400]);
   });
 });

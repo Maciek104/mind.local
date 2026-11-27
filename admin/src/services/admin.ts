@@ -16,7 +16,7 @@ export interface AdminUser {
 export interface AdminPlan {
   code: string;
   name: string;
-  storage_limit_bytes: number | null;
+  storage_limit_bytes: number;
   allowed_models: string[];
   created_at: string;
   updated_at: string;
@@ -24,7 +24,7 @@ export interface AdminPlan {
 
 export interface PlanInput {
   name: string;
-  storage_limit_bytes: number | null;
+  storage_limit_bytes: number;
   allowed_models: string[];
 }
 

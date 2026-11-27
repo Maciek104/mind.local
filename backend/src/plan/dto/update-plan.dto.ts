@@ -2,7 +2,6 @@ import {
   ArrayUnique,
   IsArray,
   IsInt,
-  IsOptional,
   IsString,
   IsNotEmpty,
   Max,
@@ -19,11 +18,11 @@ export class UpdatePlanDto {
   @MaxLength(100)
   name?: string;
 
-  @IsOptional()
+  @ValidateIf((_object, value: unknown) => value !== undefined)
   @IsInt()
   @Min(0)
   @Max(Number.MAX_SAFE_INTEGER)
-  storage_limit_bytes?: number | null;
+  storage_limit_bytes?: number;
 
   @ValidateIf((_object, value: unknown) => value !== undefined)
   @IsArray()

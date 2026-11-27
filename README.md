@@ -17,12 +17,15 @@
 - Application navigation includes Home, Chat, Notes, Library, Settings, About, and Account pages.
 - Document library operations:
   - upload files up to 25 MB,
+  - extract text from TXT, Markdown, CSV, JSON, PDF, and DOCX files,
+  - normalize extracted text and store overlapping LLM-sized chunks,
   - upload multiple files individually or by drag and drop,
   - list file metadata and totals, download originals, and delete a user's documents.
 - Chat page with prompt suggestions and in-session message rendering.
 - Settings page with appearance, language, chat model, prompt, Enter-to-send, and library controls.
 - Account plan and role display, profile editing, and avatar management.
 - FREE, PRO, and ULTRA plan records with configurable storage and model metadata.
+- Ollama model catalog synchronization and persistent model metadata in SQLite.
 - Administrator panel for user management and reviewing or downloading uploaded files.
 - Local SQLite database initialization, foreign-key constraints, indexes, and update triggers.
 - About page describing the project, its capabilities, and its creators.
@@ -33,8 +36,8 @@
 - Notes is a concept page and does not yet create or organize notes.
 - Settings controls are currently interface previews and are not persisted as user preferences.
 - Conversation and message API modules are NestJS scaffolds; their service methods currently return placeholder values and do not persist data.
-- The database schema includes document chunks and a field for BGE-M3 embeddings, but document extraction, chunking, embedding generation, semantic search, and AI responses are not connected to the application.
-- Plan storage limits and allowed model lists are metadata only; application quotas and model access are not enforced yet.
+- Document text extraction and chunking are implemented for TXT, Markdown, CSV, JSON, text-based PDF, and DOCX. Scanned PDF OCR, embedding generation, semantic search, and AI responses are not connected to the application.
+- Document storage is capped by plan: FREE 1 GiB, PRO 10 GiB, and ULTRA 100 GiB. Allowed model lists remain metadata only and are not enforced yet.
 
 ## Technology
 
@@ -93,6 +96,11 @@ npm run start:dev
 The API listens at `http://localhost:3000`.
 
 On startup, the backend creates `backend/data/` and initializes `local-mind.sqlite` from `database/schema.sql` when the database is new. It also creates a `.env` file with a generated `JWT_SECRET` if one does not exist. Keep `.env` private and do not commit secrets.
+
+The Ollama server URL defaults to `http://localhost:11434`; set
+`OLLAMA_BASE_URL` in `backend/.env` to use a different server. Sign in as an
+administrator and call `POST /models/sync` to refresh the model catalog from
+Ollama. Authenticated users can read the stored catalog with `GET /models`.
 
 ### 2. Start the frontend
 
@@ -171,7 +179,7 @@ The global authentication guard protects API routes by default. Setup status, se
 | `GET`, `PATCH`, `DELETE` | `/users/:id` | Read, update, activate/deactivate, or delete a user (administrator only) |
 | `GET`, `PATCH` | `/users/me` | Read or update the current user's profile |
 | `POST`, `GET`, `DELETE` | `/users/me/avatar` | Upload (up to 5 MB), retrieve, or remove the current user's avatar |
-| `GET`, `POST` | `/documents` | List documents or upload one using multipart field `file` (up to 25 MB) |
+| `GET`, `POST` | `/documents` | List documents or upload a TXT, Markdown, CSV, JSON, PDF, or DOCX file (up to 25 MB); extracted text is chunked and the user's plan quota is enforced |
 | `GET`, `PATCH`, `DELETE` | `/documents/:id` | Read, rename, or delete a document |
 | `GET` | `/documents/:id/download` | Download a document |
 | `GET` | `/documents/admin` | List document metadata across users (administrator only) |
@@ -179,6 +187,9 @@ The global authentication guard protects API routes by default. Setup status, se
 | `GET` | `/plan` | List plan metadata |
 | `GET` | `/plan/:code` | Read one plan |
 | `PATCH` | `/plan/:code` | Update a plan's storage or model metadata (administrator only) |
+| `GET` | `/models` | List models currently synchronized from Ollama |
+| `GET` | `/models/:name` | Read one synchronized model |
+| `POST` | `/models/sync` | Synchronize the model catalog from Ollama (administrator only) |
 | `CRUD` | `/conversations`, `/messages` | Scaffold routes; persistence and functional operations are not implemented |
 
 Document operations are scoped to the authenticated user. Uploaded files and avatars are saved under `backend/data/`; their metadata is kept in SQLite.
@@ -191,6 +202,7 @@ The schema is in [`database/schema.sql`](./database/schema.sql). It defines:
 - `auth_sessions` — session identifiers and expiration times,
 - `documents` — document metadata and processing status,
 - `document_chunks` — text chunks and an optional serialized embedding,
+- `models` — model identifiers and metadata synchronized from Ollama,
 - `conversations` and `messages` — schema for planned conversation functionality.
 
 SQLite foreign keys and WAL mode are enabled. The backend applies user-profile column additions to an existing database at startup.

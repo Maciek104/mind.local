@@ -34,9 +34,7 @@ function PlanCard({ plan, onSave }: {
 }) {
   const [name, setName] = useState(plan.name);
   const [storageLimit, setStorageLimit] = useState(
-    plan.storage_limit_bytes === null
-      ? ''
-      : String(plan.storage_limit_bytes / (1024 ** 3)),
+    String(plan.storage_limit_bytes / (1024 ** 3)),
   );
   const [allowedModels, setAllowedModels] = useState(plan.allowed_models);
   const [error, setError] = useState('');
@@ -54,9 +52,9 @@ function PlanCard({ plan, onSave }: {
     setError('');
     setSaving(true);
 
-    const storageGb = storageLimit === '' ? null : Number(storageLimit);
-    if (storageGb !== null && (!Number.isFinite(storageGb) || storageGb < 0
-      || storageGb * (1024 ** 3) > Number.MAX_SAFE_INTEGER)) {
+    const storageGb = Number(storageLimit);
+    if (storageLimit.trim() === '' || !Number.isFinite(storageGb)
+      || storageGb < 0 || storageGb * (1024 ** 3) > Number.MAX_SAFE_INTEGER) {
       setError('Enter a valid storage limit.');
       setSaving(false);
       return;
@@ -65,9 +63,7 @@ function PlanCard({ plan, onSave }: {
     try {
       await onSave(plan, {
         name: name.trim(),
-        storage_limit_bytes: storageGb === null
-          ? null
-          : Math.round(storageGb * (1024 ** 3)),
+        storage_limit_bytes: Math.round(storageGb * (1024 ** 3)),
         allowed_models: allowedModels,
       });
     } catch (saveError) {
@@ -85,7 +81,7 @@ function PlanCard({ plan, onSave }: {
           <p>Configure the name, storage allowance and available models for this plan.</p>
         </div>
         <span className="plan-storage-summary">
-          {plan.storage_limit_bytes === null ? 'Unlimited storage' : formatSize(plan.storage_limit_bytes)}
+          {formatSize(plan.storage_limit_bytes)}
         </span>
       </div>
       <div className="plan-fields">
@@ -99,14 +95,14 @@ function PlanCard({ plan, onSave }: {
           />
         </label>
         <label>
-          Storage limit (GB)
+          Storage limit (GiB)
           <input
             type="number"
             min="0"
             step="0.1"
             value={storageLimit}
             onChange={(event) => setStorageLimit(event.target.value)}
-            placeholder="Unlimited"
+            required
           />
         </label>
       </div>
@@ -144,7 +140,7 @@ function Plans({ plans, loading, onSave }: PlansProps) {
           <h1>Plans</h1>
           <p className="page-subtitle">Choose the storage limits and models included in each plan.</p>
           <p className="plan-metadata-note">
-            These settings are saved as plan metadata; access limits are not enforced yet.
+            Storage limits are enforced for document uploads. Model access remains metadata only.
           </p>
         </div>
       </div>

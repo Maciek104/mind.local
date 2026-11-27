@@ -9,9 +9,10 @@ import { SetupModule } from './setup/setup.module.js';
 import { DatabaseModule } from './database/database.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { PlanModule } from './plan/plan.module.js';
+import { ModelsModule } from './models/models.module.js';
 
 @Module({
-  imports: [UsersModule, DocumentsModule, ConversationsModule, MessagesModule, SetupModule, DatabaseModule, AuthModule, PlanModule],
+  imports: [UsersModule, DocumentsModule, ConversationsModule, MessagesModule, SetupModule, DatabaseModule, AuthModule, PlanModule, ModelsModule],
   controllers: [AppController],
   providers: [AppService],
 })

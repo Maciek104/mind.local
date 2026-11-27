@@ -9,7 +9,7 @@ import { UpdatePlanDto } from './dto/update-plan.dto.js';
 interface PlanRow {
   code: string;
   name: string;
-  storage_limit_bytes: number | null;
+  storage_limit_bytes: number;
   allowed_models: string;
   created_at: string;
   updated_at: string;
@@ -44,7 +44,7 @@ export class PlanService {
     this.findOne(planCode);
 
     const fields: string[] = [];
-    const values: Array<string | number | null> = [];
+    const values: Array<string | number> = [];
 
     if (updatePlanDto.name !== undefined) {
       const name = updatePlanDto.name.trim();
