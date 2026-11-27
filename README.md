@@ -2,7 +2,7 @@
 
 **local.mind** is a local-first knowledge-management application for organizing documents and personal information. It consists of a React frontend and a NestJS API backed by SQLite.
 
-> The project is under active development. Authentication, user profiles, and basic document-library operations are implemented. The chat, notes, and settings views are currently placeholders; AI responses and semantic search are not connected.
+> The project is under active development. Authentication, user profiles, document-library operations, plan metadata, and administrator tools are implemented. Chat messages are currently client-side only, while Notes and persistent Settings remain in development. AI responses and semantic search are not connected.
 
 ## Features and project status
 
@@ -17,15 +17,24 @@
 - Application navigation includes Home, Chat, Notes, Library, Settings, About, and Account pages.
 - Document library operations:
   - upload files up to 25 MB,
-  - list, rename, download, and delete a user's documents.
+  - upload multiple files individually or by drag and drop,
+  - list file metadata and totals, download originals, and delete a user's documents.
+- Chat page with prompt suggestions and in-session message rendering.
+- Settings page with appearance, language, chat model, prompt, Enter-to-send, and library controls.
+- Account plan and role display, profile editing, and avatar management.
+- FREE, PRO, and ULTRA plan records with configurable storage and model metadata.
+- Administrator panel for user management and reviewing or downloading uploaded files.
 - Local SQLite database initialization, foreign-key constraints, indexes, and update triggers.
 - About page describing the project, its capabilities, and its creators.
 
 ### In progress or not yet implemented
 
-- Chat, Notes, and Settings currently contain their page shells, but do not yet provide their planned functionality.
+- Chat messages are stored only in the current browser session and are not sent to an AI service or persisted.
+- Notes is a concept page and does not yet create or organize notes.
+- Settings controls are currently interface previews and are not persisted as user preferences.
 - Conversation and message API modules are NestJS scaffolds; their service methods currently return placeholder values and do not persist data.
 - The database schema includes document chunks and a field for BGE-M3 embeddings, but document extraction, chunking, embedding generation, semantic search, and AI responses are not connected to the application.
+- Plan storage limits and allowed model lists are metadata only; application quotas and model access are not enforced yet.
 
 ## Technology
 
@@ -50,6 +59,7 @@
 │   │   ├── setup/         # First-run administrator setup
 │   │   ├── users/         # User profiles and avatar operations
 │   │   ├── documents/     # Document upload and library API
+│   │   ├── plan/          # FREE, PRO, and ULTRA plan metadata
 │   │   ├── conversations/ # Conversation API scaffold
 │   │   ├── messages/      # Message API scaffold
 │   │   └── database/      # SQLite initialization and migrations
@@ -166,6 +176,9 @@ The global authentication guard protects API routes by default. Setup status, se
 | `GET` | `/documents/:id/download` | Download a document |
 | `GET` | `/documents/admin` | List document metadata across users (administrator only) |
 | `GET` | `/documents/admin/:id/download` | Download any user's document (administrator only) |
+| `GET` | `/plan` | List plan metadata |
+| `GET` | `/plan/:code` | Read one plan |
+| `PATCH` | `/plan/:code` | Update a plan's storage or model metadata (administrator only) |
 | `CRUD` | `/conversations`, `/messages` | Scaffold routes; persistence and functional operations are not implemented |
 
 Document operations are scoped to the authenticated user. Uploaded files and avatars are saved under `backend/data/`; their metadata is kept in SQLite.

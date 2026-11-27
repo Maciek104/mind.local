@@ -1,22 +1,36 @@
 const API_URL = 'http://localhost:3000';
 
-export async function checkAuthentication(): Promise<boolean> {
+export interface AuthenticatedUser {
+  id: string;
+  email: string;
+  display_name: string | null;
+  bio: string | null;
+  profile_image_path: string | null;
+  plan: string;
+  role: string;
+}
+
+export async function checkAuthentication(): Promise<AuthenticatedUser | null> {
   const response = await fetch(`${API_URL}/auth/me`, {
     credentials: 'include',
   });
 
   if (response.status === 401) {
-    return false;
+    return null;
   }
 
   if (!response.ok) {
     throw new Error('Nie udało się sprawdzić sesji użytkownika.');
   }
 
-  return true;
+  const data = await response.json();
+  return data.user as AuthenticatedUser;
 }
 
-export async function login(email: string, password: string): Promise<void> {
+export async function login(
+  email: string,
+  password: string,
+): Promise<AuthenticatedUser> {
   const response = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',
     headers: {
@@ -35,16 +49,19 @@ export async function login(email: string, password: string): Promise<void> {
         : data.message || 'Nie udało się zalogować.',
     );
   }
+
+  return data.user as AuthenticatedUser;
 }
 
-export interface AuthenticatedUser {
-  id: string;
-  email: string;
-  display_name: string | null;
-  bio: string | null;
-  profile_image_path: string | null;
-  plan: string;
-  role: string;
+export async function logout(): Promise<void> {
+  const response = await fetch(`${API_URL}/auth/logout`, {
+    method: 'POST',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error('Could not log out. Please try again.');
+  }
 }
 
 export async function getCurrentUser(): Promise<AuthenticatedUser> {

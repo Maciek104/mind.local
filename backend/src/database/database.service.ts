@@ -63,6 +63,8 @@ export class DatabaseService implements OnModuleDestroy {
       this.ensureUserColumns();
     }
 
+    this.ensurePlans();
+
     console.log(`SQLite connected: ${databasePath}`);
   }
 
@@ -88,6 +90,40 @@ export class DatabaseService implements OnModuleDestroy {
         "ALTER TABLE users ADD COLUMN plan TEXT NOT NULL DEFAULT 'FREE'",
       );
     }
+  }
+
+  private ensurePlans(): void {
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS plans (
+        code TEXT PRIMARY KEY NOT NULL
+          CHECK (code IN ('FREE', 'PRO', 'ULTRA')),
+        name TEXT NOT NULL,
+        storage_limit_bytes INTEGER
+          CHECK (storage_limit_bytes IS NULL OR storage_limit_bytes >= 0),
+        allowed_models TEXT NOT NULL DEFAULT '[]',
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TRIGGER IF NOT EXISTS trg_plans_updated_at
+      AFTER UPDATE ON plans
+      FOR EACH ROW
+      BEGIN
+        UPDATE plans
+        SET updated_at = CURRENT_TIMESTAMP
+        WHERE code = NEW.code;
+      END;
+    `);
+
+    this.db
+      .prepare('INSERT OR IGNORE INTO plans (code, name) VALUES (?, ?)')
+      .run('FREE', 'FREE');
+    this.db
+      .prepare('INSERT OR IGNORE INTO plans (code, name) VALUES (?, ?)')
+      .run('PRO', 'PRO');
+    this.db
+      .prepare('INSERT OR IGNORE INTO plans (code, name) VALUES (?, ?)')
+      .run('ULTRA', 'ULTRA');
   }
 
   get connection(): Database.Database {

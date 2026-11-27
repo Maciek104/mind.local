@@ -27,6 +27,24 @@ CREATE TABLE users (
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- PLANS
+
+CREATE TABLE plans (
+    code TEXT PRIMARY KEY NOT NULL
+        CHECK (code IN ('FREE', 'PRO', 'ULTRA')),
+    name TEXT NOT NULL,
+    storage_limit_bytes INTEGER
+        CHECK (storage_limit_bytes IS NULL OR storage_limit_bytes >= 0),
+    allowed_models TEXT NOT NULL DEFAULT '[]',
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT OR IGNORE INTO plans (code, name) VALUES
+    ('FREE', 'FREE'),
+    ('PRO', 'PRO'),
+    ('ULTRA', 'ULTRA');
+
 -- DOCUMENTS
 
 CREATE TABLE documents (
@@ -152,6 +170,15 @@ BEGIN
     UPDATE users
     SET updated_at = CURRENT_TIMESTAMP
     WHERE id = NEW.id;
+END;
+
+CREATE TRIGGER trg_plans_updated_at
+AFTER UPDATE ON plans
+FOR EACH ROW
+BEGIN
+    UPDATE plans
+    SET updated_at = CURRENT_TIMESTAMP
+    WHERE code = NEW.code;
 END;
 
 CREATE TRIGGER trg_documents_updated_at

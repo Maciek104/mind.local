@@ -51,6 +51,11 @@ export class UsersController {
     @Req() request: AuthenticatedRequest,
     @Body() updateUserDto: UpdateUserDto,
   ) {
+    if (updateUserDto.plan !== undefined) {
+      throw new BadRequestException(
+        'Nie możesz zmieniać planu konta przez profil',
+      );
+    }
     if (updateUserDto.is_active !== undefined) {
       throw new BadRequestException(
         'Nie możesz zmieniać statusu własnego konta przez profil',

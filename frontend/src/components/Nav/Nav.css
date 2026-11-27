@@ -33,6 +33,15 @@
     color: darkslategray;
 }
 
+.nav .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    margin-left: auto;
+    margin-right: 24px;
+}
+
 .nav .account-link {
     display: flex;
     justify-content: center;
@@ -43,8 +52,6 @@
 
     aspect-ratio: 1/1;
 
-    margin-left: auto;
-    margin-right: 24px;
     align-self: center;
 
     padding: 4px;
@@ -60,7 +67,31 @@
     border-radius: 16px;
 }
 
-.nav .account-icon {
+.nav .account-icon,
+.nav .admin-icon {
     width: 16px;
     height: 16px;
+}
+
+.nav .admin-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 32px;
+    height: 32px;
+    aspect-ratio: 1/1;
+    padding: 4px;
+    box-sizing: border-box;
+    align-self: center;
+
+    background: linear-gradient(
+        -45deg,
+        darkslategray,
+        darkslateblue
+    );
+
+    color: whitesmoke;
+    text-decoration: none;
+    border-radius: 16px;
 }

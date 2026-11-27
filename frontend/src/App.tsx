@@ -23,13 +23,15 @@ import About from './pages/About/About.tsx';
 import Account from './pages/Account/Account.tsx';
 
 import { checkSetupStatus } from './services/setup.ts';
-import { checkAuthentication } from './services/auth.ts';
+import { checkAuthentication, type AuthenticatedUser } from './services/auth.ts';
+import AdminAccessContext from './context/AdminAccessContext.ts';
 
 type AppStatus = 'loading' | 'setup' | 'ready' | 'error';
 
 function App() {
   const [status, setStatus] = useState<AppStatus>('loading');
   const [authenticated, setAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [error, setError] = useState('');
 
   async function checkSetup() {
@@ -41,7 +43,9 @@ function App() {
         return;
       }
 
-      setAuthenticated(await checkAuthentication());
+      const user = await checkAuthentication();
+      setAuthenticated(user !== null);
+      setIsAdmin(user?.role === 'ADMIN');
       setStatus('ready');
     } catch (err) {
       console.error(err);
@@ -62,6 +66,7 @@ function App() {
 
   return (
     <Router>
+      <AdminAccessContext.Provider value={isAdmin}>
       {status === 'loading' && (
         <div>Ładowanie local.mind...</div>
       )}
@@ -93,7 +98,14 @@ function App() {
             element={
               authenticated
                 ? <Navigate to="/" replace />
-                : <Login onLogin={() => setAuthenticated(true)} />
+                : (
+                  <Login
+                    onLogin={(user: AuthenticatedUser) => {
+                      setAuthenticated(true);
+                      setIsAdmin(user.role === 'ADMIN');
+                    }}
+                  />
+                )
             }
           />
 
@@ -103,7 +115,12 @@ function App() {
               authenticated
                 ? (
                   <div className="layout">
-                    <Aside />
+                    <Aside
+                      onLogout={() => {
+                        setAuthenticated(false);
+                        setIsAdmin(false);
+                      }}
+                    />
 
                     <Routes>
                       <Route path="/" element={<Home />} />
@@ -123,6 +140,7 @@ function App() {
           />
         </Routes>
       )}
+      </AdminAccessContext.Provider>
     </Router>
   );
 }

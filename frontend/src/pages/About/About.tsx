@@ -23,13 +23,10 @@ function About() {
                         <h1>Your knowledge, on your terms.</h1>
                         <p>
                             mind.local is a locally developed application for
-                            collecting documents and organizing personal
-                            knowledge. It aims to make it easier to store,
-                            revisit, and work with materials in one place while
-                            keeping control of your data. The project combines
-                            a React interface, a NestJS backend, and an SQLite
-                            database. More features are in development,
-                            including semantic search and AI-powered answers.
+                            organizing documents and personal knowledge. It keeps
+                            the application, database, uploaded files, and user
+                            data together on your own server. The project combines
+                            a React interface, a NestJS API, and SQLite.
                         </p>
                     </div>
                 </section>
@@ -37,26 +34,55 @@ function About() {
                 <div className="about-features">
                     <article className="about-card">
                         <img src={docsIcon} alt="" />
-                        <h3>Documents</h3>
+                        <h3>Document library</h3>
                         <p>
-                            Add and store your files in a local document
-                            library.
+                            Upload several files, browse their metadata, download
+                            originals, and remove documents you no longer need.
+                            Each file is limited to 25 MB.
                         </p>
                     </article>
                     <article className="about-card">
                         <img src={chatIcon} alt="" />
-                        <h3>Conversations</h3>
+                        <h3>Your account</h3>
                         <p>
-                            A conversation interface is part of the project;
-                            AI features and semantic search are in development.
+                            Manage your display name, bio, profile photo, email,
+                            role, and plan from one protected account page.
                         </p>
                     </article>
                     <article className="about-card">
                         <img src={libraryIcon} alt="" />
-                        <h3>Local data</h3>
+                        <h3>Local and private</h3>
                         <p>
-                            Application data is stored locally in SQLite, and
-                            access is protected by a user account.
+                            Authentication uses an HTTP-only cookie and server-side
+                            sessions. Documents and avatars are stored locally,
+                            with metadata kept in SQLite.
+                        </p>
+                    </article>
+                    <article className="about-card">
+                        <img src={docsIcon} alt="" />
+                        <h3>Administration</h3>
+                        <p>
+                            Administrator accounts can create and manage users,
+                            activate or deactivate them, and change their plans,
+                            and review uploaded documents.
+                        </p>
+                    </article>
+                    <article className="about-card">
+                        <img src={chatIcon} alt="" />
+                        <h3>Chat interface</h3>
+                        <p>
+                            The conversation view supports prompt suggestions and
+                            local in-session messages. It is not connected to an
+                            AI model or persistent conversations yet.
+                        </p>
+                    </article>
+                    <article className="about-card">
+                        <img src={libraryIcon} alt="" />
+                        <h3>Plans and settings</h3>
+                        <p>
+                            The API includes FREE, PRO, and ULTRA plan metadata.
+                            Settings expose planned appearance, language, chat,
+                            and privacy controls; persistence is still in progress.
                         </p>
                     </article>
                 </div>

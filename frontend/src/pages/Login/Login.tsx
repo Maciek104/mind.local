@@ -6,10 +6,11 @@ import './Login.css';
 import Nav from '../../components/Nav/Nav.tsx';
 import Footer from '../../components/Footer/Footer.tsx';
 import { login } from '../../services/auth.ts';
+import type { AuthenticatedUser } from '../../services/auth.ts';
 import keyIcon from '../../assets/icons/key.svg';
 
 interface LoginProps {
-    onLogin: () => void;
+    onLogin: (user: AuthenticatedUser) => void;
 }
 
 function Login({ onLogin }: LoginProps) {
@@ -25,8 +26,8 @@ function Login({ onLogin }: LoginProps) {
 
         try {
             setLoading(true);
-            await login(email.trim().toLowerCase(), password);
-            onLogin();
+            const user = await login(email.trim().toLowerCase(), password);
+            onLogin(user);
             navigate('/', { replace: true });
         } catch (err) {
             setError(

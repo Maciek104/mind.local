@@ -25,6 +25,17 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Plans API
+
+Plans are stored in SQLite and initialized with `FREE`, `PRO`, and `ULTRA`.
+Authenticated users can read `GET /plan` and `GET /plan/:code`; administrators
+can configure them with `PATCH /plan/:code`. These three built-in plans cannot
+be added or removed through the API.
+
+Plan records expose `storage_limit_bytes` (null until configured) and
+`allowed_models` (an array of model identifiers). These values are metadata;
+storage and model access enforcement is not part of this API change.
+
 ## Project setup
 
 ```bash

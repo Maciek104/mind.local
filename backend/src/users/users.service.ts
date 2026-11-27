@@ -32,6 +32,9 @@ export class UsersService {
 
   async create(dto: CreateUserDto) {
     const email = dto.email.trim().toLowerCase();
+    const plan = dto.plan?.trim().toUpperCase() ?? 'FREE';
+    this.assertPlanExists(plan);
+
     const existing = this.database.connection
       .prepare('SELECT id FROM users WHERE email = ?')
       .get(email);
@@ -64,7 +67,7 @@ export class UsersService {
         dto.display_name ?? null,
         dto.bio ?? null,
         dto.profile_image_path ?? null,
-        dto.plan ?? 'FREE',
+        plan,
       );
 
     return this.findOne(id);
@@ -119,6 +122,11 @@ export class UsersService {
 
   async update(id: string, dto: UpdateUserDto) {
     const user = this.findOne(id);
+
+    if (dto.plan !== undefined) {
+      dto.plan = dto.plan.trim().toUpperCase();
+      this.assertPlanExists(dto.plan);
+    }
 
     if (
       user.role === 'ADMIN' &&
@@ -202,6 +210,16 @@ export class UsersService {
       throw new BadRequestException(
         'Nie można dezaktywować ani usunąć ostatniego aktywnego administratora',
       );
+    }
+  }
+
+  private assertPlanExists(code: string): void {
+    const plan = this.database.connection
+      .prepare('SELECT code FROM plans WHERE code = ? LIMIT 1')
+      .get(code);
+
+    if (!plan) {
+      throw new BadRequestException('Plan not found');
     }
   }
 
