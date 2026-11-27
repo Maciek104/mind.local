@@ -21,6 +21,7 @@ import Library from './pages/Library/Library.tsx';
 import Settings from './pages/Settings/Settings.tsx';
 import About from './pages/About/About.tsx';
 import Account from './pages/Account/Account.tsx';
+import Tetris from './pages/tetris/Tetris.tsx';
 
 import { checkSetupStatus } from './services/setup.ts';
 import { checkAuthentication, type AuthenticatedUser } from './services/auth.ts';
@@ -131,6 +132,7 @@ function App() {
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/about" element={<About />} />
                       <Route path="/account" element={<Account />} />
+                      <Route path="/tetris" element={<Tetris />} />
                       <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                   </div>
